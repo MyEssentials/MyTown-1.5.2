@@ -89,8 +89,7 @@ public class MyTownDatasource extends MyTownDB {
         return null;
     }
 
-    public TownBlock getPermBlockAtCoord(int world_dimension, int x, int y,
-            int z) {
+    public TownBlock getPermBlockAtCoord(int world_dimension, int x, int y, int z) {
         return getPermBlockAtCoord(world_dimension, x, y, y, z);
     }
 
@@ -140,7 +139,7 @@ public class MyTownDatasource extends MyTownDB {
         return null;
     }
 
-    public Resident getOrMakeResident(EntityPlayer player) {
+    public synchronized Resident getOrMakeResident(EntityPlayer player) {
         for (Resident res : residents) {
             if (res.onlinePlayer == player) {
                 return res;

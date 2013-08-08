@@ -186,9 +186,11 @@ public class Resident {
     }
 
     public boolean canByPassCheck(TownSettingCollection.Permissions level) {
-        return ForgePerms.getPermissionsHandler().canAccess(this.name(),
-                onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.adm.bypass." + level.toString().toLowerCase());
+        if (onlinePlayer == null){
+            return false;
+        }
+        
+        return ForgePerms.getPermissionsHandler().canAccess(this.name(), onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.bypass." + level.toString().toLowerCase());
     }
 
     public boolean pvpBypass() {
@@ -197,16 +199,13 @@ public class Resident {
                 "mytown.adm.bypass.pvp");
     }
 
-    public boolean canInteract(int chunkX, int chunkZ,
-            TownSettingCollection.Permissions askedFor) {
-        TownBlock block = MyTownDatasource.instance.getBlock(
-                onlinePlayer.dimension, chunkX, chunkZ);
+    public boolean canInteract(int chunkX, int chunkZ, TownSettingCollection.Permissions askedFor) {
+        TownBlock block = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, chunkX, chunkZ);
 
         return canInteract(block, askedFor);
     }
 
-    public boolean canInteract(TownBlock block,
-            TownSettingCollection.Permissions askedFor) {
+    public boolean canInteract(TownBlock block, TownSettingCollection.Permissions askedFor) {
         boolean b = canInteractSub(block, askedFor);
         if (!b && canByPassCheck(askedFor)) {
             b = true;
@@ -215,15 +214,12 @@ public class Resident {
         return b;
     }
 
-    private boolean canInteractSub(TownBlock block,
-            TownSettingCollection.Permissions askedFor) {
+    private boolean canInteractSub(TownBlock block, TownSettingCollection.Permissions askedFor) {
         if (block == null || block.town() == null) {
-            return MyTown.instance.getWorldWildSettings(onlinePlayer.dimension).outsiderRights
-                    .compareTo(askedFor) >= 0;
+            return MyTown.instance.getWorldWildSettings(onlinePlayer.dimension).outsiderRights.compareTo(askedFor) >= 0;
         }
 
-        if (block.owner() == this || block.town() == town()
-                && rank() != Rank.Resident) {
+        if (block.owner() == this || block.town() == town() && rank() != Rank.Resident) {
             return true;
         }
 
@@ -235,8 +231,7 @@ public class Resident {
             return block.settings.townMemberRights.compareTo(askedFor) >= 0;
         }
 
-        if (town() != null && town().nation() != null
-                && town().nation() == block.town().nation()) {
+        if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
             return block.settings.nationMemberRights.compareTo(askedFor) >= 0;
         }
 
@@ -272,20 +267,16 @@ public class Resident {
         return canInteract(targetBlock, askedFor);
     }
 
-    public boolean canInteract(int dimension, int x, int y, int z,
-            TownSettingCollection.Permissions askedFor) {
-        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(
-                dimension, x, y, z);
+    public boolean canInteract(int dimension, int x, int y, int z, TownSettingCollection.Permissions askedFor) {
+        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(dimension, x, y, z);
         if (targetBlock == null || targetBlock.town() == null) {
-            return MyTown.instance.getWorldWildSettings(dimension).outsiderRights
-                    .compareTo(askedFor) >= 0;
+            return MyTown.instance.getWorldWildSettings(dimension).outsiderRights.compareTo(askedFor) >= 0;
         }
 
         return canInteract(targetBlock, askedFor);
     }
 
-    public boolean canInteract(int x, int y, int z,
-            TownSettingCollection.Permissions askedFor) {
+    public boolean canInteract(int x, int y, int z, TownSettingCollection.Permissions askedFor) {
         return canInteract(onlinePlayer.dimension, x, y, z, askedFor);
     }
 

@@ -18,8 +18,7 @@ public class TrainCraft extends ProtBase {
 
     @Override
     public void load() throws Exception {
-        clEntityTracksBuilder = Class
-                .forName("src.train.common.entity.rollingStock.EntityTracksBuilder");
+        clEntityTracksBuilder = Class.forName("src.train.common.entity.rollingStock.EntityTracksBuilder");
     }
 
     @Override

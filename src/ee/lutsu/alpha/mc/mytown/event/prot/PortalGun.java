@@ -33,8 +33,7 @@ public class PortalGun extends ProtBase {
 
     @Override
     public void load() throws Exception {
-        clPortalBall = Class
-                .forName("portalgun.common.entity.EntityPortalBall");
+        clPortalBall = Class.forName("portalgun.common.entity.EntityPortalBall");
     }
 
     @Override
@@ -51,10 +50,8 @@ public class PortalGun extends ProtBase {
     public String update(Entity e) throws Exception {
 
         Vec3 currPos = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
-        Vec3 nextPos = Vec3.createVectorHelper(e.posX + e.motionX, e.posY
-                + e.motionY, e.posZ + e.motionZ);
-        MovingObjectPosition collision = e.worldObj.rayTraceBlocks(currPos,
-                nextPos);
+        Vec3 nextPos = Vec3.createVectorHelper(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
+        MovingObjectPosition collision = e.worldObj.rayTraceBlocks(currPos, nextPos);
 
         // Not trying to make a portal yet
         if (collision == null) {
@@ -69,29 +66,24 @@ public class PortalGun extends ProtBase {
                 owner = owner.substring(0, owner.length() - 2);
             }
 
-            Resident r = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance
-                    .getResident(owner);
+            Resident r = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident(owner);
             if (r == null || !r.isOnline()) {
                 return "Owner " + owner + " not found or offline";
             }
 
             for (int i = 0; i < 7; i++) {
-                if (!r.canInteract(collision.blockX + xPos[i], collision.blockY
-                        + yPos[i], collision.blockZ + zPos[i],
-                        Permissions.Build)) {
+                if (!r.canInteract(collision.blockX + xPos[i], collision.blockY + yPos[i], collision.blockZ + zPos[i], Permissions.Build)) {
                     return "Cannot shoot portals in this town";
                 }
             }
         } else {
             Set<ChunkCoord> chunks = new HashSet<ChunkCoord>();
             for (int i = 0; i < 5; i++) {
-                chunks.add(ChunkCoord.getCoord(collision.blockX + xPos[i],
-                        collision.blockZ + zPos[i]));
+                chunks.add(ChunkCoord.getCoord(collision.blockX + xPos[i], collision.blockZ + zPos[i]));
             }
 
             for (ChunkCoord chunk : chunks) {
-                TownBlock b = MyTownDatasource.instance.getBlock(e.dimension,
-                        chunk.x, chunk.z);
+                TownBlock b = MyTownDatasource.instance.getBlock(e.dimension, chunk.x, chunk.z);
                 if (b != null && b.town() != null) {
                     return "Cannot use default portals in towns";
                 }

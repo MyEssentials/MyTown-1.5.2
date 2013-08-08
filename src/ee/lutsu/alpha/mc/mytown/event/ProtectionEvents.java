@@ -31,6 +31,7 @@ import ee.lutsu.alpha.mc.mytown.event.prot.ComputerCraft;
 import ee.lutsu.alpha.mc.mytown.event.prot.Creeper;
 import ee.lutsu.alpha.mc.mytown.event.prot.CustomNPCs;
 import ee.lutsu.alpha.mc.mytown.event.prot.IndustrialCraft;
+import ee.lutsu.alpha.mc.mytown.event.prot.MFR;
 import ee.lutsu.alpha.mc.mytown.event.prot.Mekanism;
 import ee.lutsu.alpha.mc.mytown.event.prot.Mobs;
 import ee.lutsu.alpha.mc.mytown.event.prot.ModularPowersuits;
@@ -40,6 +41,7 @@ import ee.lutsu.alpha.mc.mytown.event.prot.RedPower;
 import ee.lutsu.alpha.mc.mytown.event.prot.SteveCarts;
 import ee.lutsu.alpha.mc.mytown.event.prot.TNT;
 import ee.lutsu.alpha.mc.mytown.event.prot.ThaumCraft;
+import ee.lutsu.alpha.mc.mytown.event.prot.TinkersConstruct;
 import ee.lutsu.alpha.mc.mytown.event.prot.TrainCraft;
 
 public class ProtectionEvents implements ITickHandler {
@@ -64,13 +66,14 @@ public class ProtectionEvents implements ITickHandler {
                 ThaumCraft.instance, ArsMagica.instance, PortalGun.instance,
                 IndustrialCraft.instance, SteveCarts.instance,
                 RailCraft.instance, TrainCraft.instance, Mekanism.instance,
-                ModularPowersuits.instance }));
+                ModularPowersuits.instance, MFR.instance }));
         ProtectionEvents.tileProtections.addAll(Arrays.asList(new ProtBase[] {
                 BuildCraft.instance, RedPower.instance, ComputerCraft.instance,
                 ThaumCraft.instance }));
         ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] {
                 BuildCraft.instance, RedPower.instance, ComputerCraft.instance,
-                ArsMagica.instance, ThaumCraft.instance }));
+                ArsMagica.instance, ThaumCraft.instance, ModularPowersuits.instance,
+                TinkersConstruct.instance}));
     }
 
     /*
@@ -158,7 +161,7 @@ public class ProtectionEvents implements ITickHandler {
     }
 
     @Override
-    public void tickStart(EnumSet<TickType> type, Object... tickData) {
+    public synchronized void tickStart(EnumSet<TickType> type, Object... tickData) {
         if (!enabled) {
             return;
         }

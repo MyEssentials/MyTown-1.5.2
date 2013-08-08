@@ -140,7 +140,7 @@ public class MyTownAssistant {
             }
             int dim = res.onlinePlayer.dimension;
 
-            Assert.Perm(cs, "mytown.cmd.claim.dim" + dim);
+            Assert.Perm(cs, "mytown.cmd.claim.dim" + dim + " | mytown.cmd.claim.* | mytown.cmd.*");
             handled = true;
 
             int radius_rec = 0;
@@ -238,7 +238,7 @@ public class MyTownAssistant {
                         }, blocks);
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdUnclaim.toString())) {
-            Assert.Perm(cs, "mytown.cmd.unclaim");
+            Assert.Perm(cs, "mytown.cmd.unclaim | mytown.cmd.*");
             handled = true;
 
             if (res.onlinePlayer == null) {
@@ -293,7 +293,7 @@ public class MyTownAssistant {
             cs.sendChatToPlayer(Term.TownBlocksUnclaimed.toString(nr, sb
                     .toString()));
         } else if (args[0].equalsIgnoreCase(Term.TownCmdInvite.toString())) {
-            Assert.Perm(cs, "mytown.cmd.invite");
+            Assert.Perm(cs, "mytown.cmd.invite | mytown.cmd.*");
             handled = true;
 
             if (args.length < 2) {
@@ -330,7 +330,7 @@ public class MyTownAssistant {
                         .name()));
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdKick.toString())) {
-            Assert.Perm(cs, "mytown.cmd.kick");
+            Assert.Perm(cs, "mytown.cmd.kick | mytown.cmd.*");
             handled = true;
 
             if (args.length < 2) {
@@ -367,7 +367,7 @@ public class MyTownAssistant {
                                 .name()));
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdPlot.toString())) {
-            Assert.Perm(cs, "mytown.cmd.plot");
+            Assert.Perm(cs, "mytown.cmd.plot | mytown.cmd.*");
             handled = true;
 
             if (args.length < 2) {
@@ -421,11 +421,11 @@ public class MyTownAssistant {
                         }
 
                         if (target == null && b.owner() != null && !canUnAssign) {
-                            Assert.Perm(cs, "mytown.cmd.plot.unassign");
+                            Assert.Perm(cs, "mytown.cmd.plot.unassign | mytown.cmd.*");
                             canUnAssign = true;
                         }
                         if (target != null && b.owner() != null && !canReAssign) {
-                            Assert.Perm(cs, "mytown.cmd.plot.reassign");
+                            Assert.Perm(cs, "mytown.cmd.plot.reassign | mytown.cmd.*");
                             canReAssign = true;
                         }
 
@@ -441,7 +441,7 @@ public class MyTownAssistant {
                 }
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdSetSpawn.toString())) {
-            Assert.Perm(cs, "mytown.cmd.setspawn");
+            Assert.Perm(cs, "mytown.cmd.setspawn | mytown.cmd.*");
             handled = true;
 
             TownBlock b = MyTownDatasource.instance.getBlock(

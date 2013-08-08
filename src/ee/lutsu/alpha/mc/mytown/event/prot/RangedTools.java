@@ -41,8 +41,7 @@ public class RangedTools extends ProtBase {
     @Override
     public String update(Resident res, Item tool, ItemStack item)
             throws Exception {
-        MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(
-                res.onlinePlayer.worldObj, res.onlinePlayer, false, 20);
+        MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 20);
         if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
             if (!res.canInteract(pos.blockX, pos.blockY, pos.blockZ,
                     Permissions.Build)) {
@@ -55,8 +54,7 @@ public class RangedTools extends ProtBase {
         }
 
         // liquids
-        pos = Utils.getMovingObjectPositionFromPlayer(
-                res.onlinePlayer.worldObj, res.onlinePlayer, true, 20);
+        pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, true, 20);
         if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
             if (!res.canInteract(pos.blockX, pos.blockY, pos.blockZ,
                     Permissions.Build)) {

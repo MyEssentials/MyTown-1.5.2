@@ -399,15 +399,13 @@ public class PlayerEvents implements IPlayerTracker {
 
     @ForgeSubscribe
     public void serverChat(ServerChatEvent ev) {
-        if (ev.isCanceled() || ev.message == null
-                || ev.message.trim().length() < 1 || !Formatter.formatChat) {
+        if (ev.isCanceled() || ev.message == null || ev.message.trim().length() < 1 || !Formatter.formatChat) {
             return;
         }
 
         ev.setCanceled(true);
         Resident res = source().getOrMakeResident(ev.player);
-        CmdChat.sendToChannelFromDirectTalk(res, ev.message, res.activeChannel,
-                false);
+        CmdChat.sendToChannelFromDirectTalk(res, ev.message, res.activeChannel, false);
     }
 
     @ForgeSubscribe

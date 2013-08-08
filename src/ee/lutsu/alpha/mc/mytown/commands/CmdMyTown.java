@@ -33,8 +33,7 @@ public class CmdMyTown extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.cmd");
+            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd");
         }
         return false;
         // return MyTown.instance.perms.canAccess(cs, "mytown.cmd");
@@ -69,16 +68,12 @@ public class CmdMyTown extends CommandBase {
         } catch (NoAccessException ex) {
             var1.sendChatToPlayer(ex.toString());
         } catch (NumberFormatException ex) {
-            var1.sendChatToPlayer(Formatter.commandError(Level.WARNING,
-                    Term.TownErrCmdNumberFormatException.toString()));
+            var1.sendChatToPlayer(Formatter.commandError(Level.WARNING, Term.TownErrCmdNumberFormatException.toString()));
         } catch (CommandException ex) {
-            var1.sendChatToPlayer(Formatter.commandError(Level.WARNING,
-                    ex.errorCode.toString(ex.args)));
+            var1.sendChatToPlayer(Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
         } catch (Throwable ex) {
-            Log.log(Level.WARNING, String.format(
-                    "Command execution error by %s", var1), ex);
-            var1.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex
-                    .toString()));
+            Log.log(Level.WARNING, String.format("Command execution error by %s", var1), ex);
+            var1.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex.toString()));
         }
     }
 

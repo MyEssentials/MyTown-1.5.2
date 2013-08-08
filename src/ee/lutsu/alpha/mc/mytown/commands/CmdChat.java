@@ -107,12 +107,8 @@ public class CmdChat extends CommandBase {
         return sendGlobalChat(res, msg, ChatChannel.Global, false);
     }
 
-    public static String sendGlobalChat(Resident res, String msg,
-            ChatChannel ch, boolean emote) {
-        if (!ForgePerms.getPermissionsHandler().canAccess(
-                res.onlinePlayer.username,
-                res.onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.chat.allowcaps")) {
+    public static String sendGlobalChat(Resident res, String msg, ChatChannel ch, boolean emote) {
+        if (!ForgePerms.getPermissionsHandler().canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcaps")) {
             msg = msg.toLowerCase();
         }
 
@@ -127,8 +123,7 @@ public class CmdChat extends CommandBase {
         }
 
         if (sentTo < 1) {
-            res.onlinePlayer.sendChatToPlayer(Term.ChatAloneInChannel
-                    .toString());
+            res.onlinePlayer.sendChatToPlayer(Term.ChatAloneInChannel.toString());
         }
 
         return formatted;
@@ -166,8 +161,7 @@ public class CmdChat extends CommandBase {
         return sentTo;
     }
 
-    public static void sendToChannelFromDirectTalk(Resident sender, String msg,
-            ChatChannel channel, boolean emote) {
+    public static void sendToChannelFromDirectTalk(Resident sender, String msg, ChatChannel channel, boolean emote) {
         if (msg == null || msg.trim().length() < 1) {
             return;
         }
@@ -175,8 +169,7 @@ public class CmdChat extends CommandBase {
         msg = msg.trim();
         boolean quickChatHit = false;
         for (ChatChannel c : ChatChannel.values()) {
-            if (c.inLineSwitch != null && !c.inLineSwitch.equals("")
-                    && msg.startsWith(c.inLineSwitch)) {
+            if (c.inLineSwitch != null && !c.inLineSwitch.equals("") && msg.startsWith(c.inLineSwitch)) {
                 channel = c;
                 msg = msg.substring(c.inLineSwitch.length());
                 quickChatHit = true;
@@ -184,22 +177,18 @@ public class CmdChat extends CommandBase {
             }
         }
 
-        if (quickChatHit
-                || !CmdPrivateMsg.chatLock.containsKey(sender.onlinePlayer)) {
+        if (quickChatHit || !CmdPrivateMsg.chatLock.containsKey(sender.onlinePlayer)) {
             sendToChannel(sender, msg.trim(), channel, emote);
         } else {
-            CmdPrivateMsg.sendChat(sender.onlinePlayer, CmdPrivateMsg.chatLock
-                    .get(sender.onlinePlayer), msg);
+            CmdPrivateMsg.sendChat(sender.onlinePlayer, CmdPrivateMsg.chatLock.get(sender.onlinePlayer), msg);
         }
     }
 
-    public static void sendToChannel(Resident sender, String msg,
-            ChatChannel channel) {
+    public static void sendToChannel(Resident sender, String msg, ChatChannel channel) {
         sendToChannel(sender, msg, channel, false);
     }
 
-    public static void sendToChannel(Resident sender, String msg,
-            ChatChannel channel, boolean emote) {
+    public static void sendToChannel(Resident sender, String msg, ChatChannel channel, boolean emote) {
         if (msg == null || msg.trim().length() < 1) {
             return;
         }
@@ -208,10 +197,7 @@ public class CmdChat extends CommandBase {
             return;
         }
 
-        if (ForgePerms.getPermissionsHandler().canAccess(
-                sender.onlinePlayer.username,
-                sender.onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.chat.allowcolors")) {
+        if (ForgePerms.getPermissionsHandler().canAccess(sender.onlinePlayer.username, sender.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
             msg = Formatter.dollarToColorPrefix(msg);
         }
 

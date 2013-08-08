@@ -20,8 +20,7 @@ public class Utils {
                 distance);
     }
 
-    public static MovingObjectPosition getMovingObjectPositionFromPlayer(
-            World world, EntityPlayer player, boolean hitLiquid, double distance) {
+    public static MovingObjectPosition getMovingObjectPositionFromPlayer(World world, EntityPlayer player, boolean hitLiquid, double distance) {
         float var4 = 1.0F;
         float var5 = player.prevRotationPitch
                 + (player.rotationPitch - player.prevRotationPitch) * var4;

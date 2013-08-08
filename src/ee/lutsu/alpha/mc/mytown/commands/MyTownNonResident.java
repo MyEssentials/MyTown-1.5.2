@@ -58,24 +58,17 @@ public class MyTownNonResident {
 
         boolean handled = false;
         String color = "2";
-        if (args.length < 1 || args.length == 1 && args[0].equals("?")
-                || args[0].equalsIgnoreCase(Term.CommandHelp.toString())) {
+        if (args.length < 1 || args.length == 1 && args[0].equals("?") || args[0].equalsIgnoreCase(Term.CommandHelp.toString())) {
             handled = true;
-            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew
-                    .toString(), Term.TownCmdNewArgs.toString(),
-                    Term.TownCmdNewDesc.toString(), color));
-            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdAccept
-                    .toString(), "", Term.TownCmdAcceptDesc.toString(), color));
-            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdDeny
-                    .toString(), "", Term.TownCmdDenyDesc.toString(), color));
+            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew.toString(), Term.TownCmdNewArgs.toString(), Term.TownCmdNewDesc.toString(), color));
+            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdAccept.toString(), "", Term.TownCmdAcceptDesc.toString(), color));
+            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdDeny.toString(), "", Term.TownCmdDenyDesc.toString(), color));
         } else if (args[0].equalsIgnoreCase(Term.TownCmdNew.toString())) {
-            Assert.Perm(cs, "mytown.cmd.new.dim" + res.onlinePlayer.dimension);
+            Assert.Perm(cs, "mytown.cmd.new.dim" + res.onlinePlayer.dimension + " | mytown.cmd.new.* | mytown.cmd.*");
             handled = true;
 
             if (args.length < 2 || args.length > 2) {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew
-                        .toString(), Term.TownCmdNewArgs.toString(),
-                        Term.TownCmdNewDesc.toString(), color));
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew .toString(), Term.TownCmdNewArgs.toString(), Term.TownCmdNewDesc.toString(), color));
             } else {
                 TownBlock home = MyTownDatasource.instance.getOrMakeBlock(
                         res.onlinePlayer.dimension,
@@ -124,7 +117,7 @@ public class MyTownNonResident {
                         }, args, home);
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdAccept.toString())) {
-            Assert.Perm(cs, "mytown.cmd.accept");
+            Assert.Perm(cs, "mytown.cmd.accept | mytown.cmd.*");
             handled = true;
 
             if (res.inviteActiveFrom == null) {
@@ -139,7 +132,7 @@ public class MyTownNonResident {
                     Term.TownPlayerJoinedTown.toString(res.name()));
             res.inviteActiveFrom = null;
         } else if (args[0].equalsIgnoreCase(Term.TownCmdDeny.toString())) {
-            Assert.Perm(cs, "mytown.cmd.deny");
+            Assert.Perm(cs, "mytown.cmd.deny | mytown.cmd.*");
             handled = true;
 
             if (res.inviteActiveFrom == null) {

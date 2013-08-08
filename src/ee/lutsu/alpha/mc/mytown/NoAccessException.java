@@ -16,34 +16,28 @@ public class NoAccessException extends Exception {
 
     @Override
     public String toString() {
-        return Formatter
-                .dollarToColorPrefix(getCustomizedMessage(Term.ErrCannotAccessCommand
-                        .toString()));
+        return Formatter.dollarToColorPrefix(Term.ErrCannotAccessCommand.toString());
     }
 
     private String getCustomizedMessage(String def) {
         String message;
-        String perm = node;
+        String[] perms = node.split("\\|");
         int index;
+        
+        for(String perm : perms){
+            while ((index = perm.lastIndexOf(".")) != -1) {
+                perm = perm.substring(0, index);
 
-        while ((index = perm.lastIndexOf(".")) != -1) {
-            perm = perm.substring(0, index);
+                message = ForgePerms.getPermissionsHandler().getOption(executor, "permission-denied-" + perm, null);
+                if (message == null) {
+                    continue;
+                }
 
-            message = ForgePerms.getPermissionsHandler().getOption(executor,
-                    "permission-denied-" + perm, null);
-            // TODO Permissions.getOption(executor, "permission-denied-" + perm,
-            // null);
-            if (message == null) {
-                continue;
+                return message;
             }
-
-            return message;
         }
 
-        // TODO message = Permissions.getOption(executor, "permission-denied",
-        // null);
-        message = ForgePerms.getPermissionsHandler().getOption(executor,
-                "permission-denied", null);
+        message = ForgePerms.getPermissionsHandler().getOption(executor, "permission-denied", null);
         if (message != null) {
             return message;
         }

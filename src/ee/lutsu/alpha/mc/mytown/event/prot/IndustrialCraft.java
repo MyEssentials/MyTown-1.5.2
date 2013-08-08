@@ -36,8 +36,7 @@ public class IndustrialCraft extends ProtBase {
         clStickyDynamite = Class.forName("ic2.core.block.EntityStickyDynamite");
         clNuke = Class.forName("ic2.core.block.EntityNuke");
         clITNT = Class.forName("ic2.core.block.EntityItnt");
-        clEntityIC2Explosive = Class
-                .forName("ic2.core.block.EntityIC2Explosive");
+        clEntityIC2Explosive = Class.forName("ic2.core.block.EntityIC2Explosive");
 
         fFuse1 = clEntityIC2Explosive.getDeclaredField("fuse");
         fFuse2 = clDynamite.getDeclaredField("fuse");
@@ -117,37 +116,28 @@ public class IndustrialCraft extends ProtBase {
             ticksInAir++;
 
             Vec3 var1 = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
-            Vec3 var2 = Vec3.createVectorHelper(e.posX + e.motionX, e.posY
-                    + e.motionY, e.posZ + e.motionZ);
-            MovingObjectPosition var3 = e.worldObj.rayTraceBlocks_do_do(var1,
-                    var2, false, true);
+            Vec3 var2 = Vec3.createVectorHelper(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
+            MovingObjectPosition var3 = e.worldObj.rayTraceBlocks_do_do(var1, var2, false, true);
             var1 = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
 
             if (var3 != null) {
-                var2 = Vec3.createVectorHelper(var3.hitVec.xCoord,
-                        var3.hitVec.yCoord, var3.hitVec.zCoord);
+                var2 = Vec3.createVectorHelper(var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
             } else {
-                var2 = Vec3.createVectorHelper(e.posX + e.motionX, e.posY
-                        + e.motionY, e.posZ + e.motionZ);
+                var2 = Vec3.createVectorHelper(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
             }
 
             Entity var4 = null;
-            List var5 = e.worldObj.getEntitiesWithinAABBExcludingEntity(e,
-                    e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ)
-                            .expand(1.0D, 1.0D, 1.0D));
+            List var5 = e.worldObj.getEntitiesWithinAABBExcludingEntity(e, e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ).expand(1.0D, 1.0D, 1.0D));
             double var6 = 0.0D;
             int var8;
 
             for (var8 = 0; var8 < var5.size(); ++var8) {
                 Entity var9 = (Entity) var5.get(var8);
 
-                if (var9.canBeCollidedWith()
-                        && (var9 != owner || ticksInAir >= 5)) {
+                if (var9.canBeCollidedWith() && (var9 != owner || ticksInAir >= 5)) {
                     float var10 = 0.3F;
-                    AxisAlignedBB var11 = var9.boundingBox.expand(var10, var10,
-                            var10);
-                    MovingObjectPosition var12 = var11.calculateIntercept(var1,
-                            var2);
+                    AxisAlignedBB var11 = var9.boundingBox.expand(var10, var10, var10);
+                    MovingObjectPosition var12 = var11.calculateIntercept(var1, var2);
 
                     if (var12 != null) {
                         double var13 = var1.distanceTo(var12.hitVec);
@@ -165,11 +155,7 @@ public class IndustrialCraft extends ProtBase {
             }
 
             if (var3 != null) {
-                if (var3.typeOfHit == EnumMovingObjectType.ENTITY
-                        && !res.canAttack(var3.entityHit)
-                        || var3.typeOfHit == EnumMovingObjectType.TILE
-                        && !res.canInteract(var3.blockX, var3.blockY,
-                                var3.blockZ, Permissions.Build)) {
+                if (var3.typeOfHit == EnumMovingObjectType.ENTITY && !res.canAttack(var3.entityHit) || var3.typeOfHit == EnumMovingObjectType.TILE && !res.canInteract(var3.blockX, var3.blockY, var3.blockZ, Permissions.Build)) {
                     return "Target in MyTown protected area";
                 }
 

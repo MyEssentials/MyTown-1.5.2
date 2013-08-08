@@ -64,10 +64,8 @@ public abstract class ProtBase {
         return false;
     }
 
-    public static Resident getActorFromLocation(int dim, int x, int y, int z,
-            String defaultActor) {
-        TownBlock block = MyTownDatasource.instance.getPermBlockAtCoord(dim, x,
-                y, z);
+    public static Resident getActorFromLocation(int dim, int x, int y, int z, String defaultActor) {
+        TownBlock block = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, y, z);
 
         Resident actor = null;
         if (block != null && block.town() != null) {

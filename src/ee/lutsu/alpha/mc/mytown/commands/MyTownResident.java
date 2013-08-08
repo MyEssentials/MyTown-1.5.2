@@ -92,7 +92,7 @@ public class MyTownResident {
         boolean handled = false;
         String color = "2";
         if (args.length < 1) {
-            Assert.Perm(cs, "mytown.cmd.info");
+            Assert.Perm(cs, "mytown.cmd.info | mytown.cmd.*");
             handled = true;
 
             res.town().sendTownInfo(res.onlinePlayer,
@@ -102,17 +102,11 @@ public class MyTownResident {
                     && (args[0].equals("?") || args[0]
                             .equalsIgnoreCase(Term.CommandHelp.toString()))) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdLeave
-                        .toString(), "", Term.TownCmdLeaveDesc.toString(),
-                        color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdOnline
-                        .toString(), "", Term.TownCmdOnlineDesc.toString(),
-                        color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdPerm
-                        .toString(), Term.TownCmdPermArgs.toString(),
-                        Term.TownCmdPermDesc.toString(), color));
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdLeave.toString(), "", Term.TownCmdLeaveDesc.toString(), color));
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdOnline.toString(), "", Term.TownCmdOnlineDesc.toString(),color));
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdPerm .toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
             } else if (args[0].equalsIgnoreCase(Term.TownCmdLeave.toString())) {
-                Assert.Perm(cs, "mytown.cmd.leave");
+                Assert.Perm(cs, "mytown.cmd.leave | mytown.cmd.*");
                 handled = true;
 
                 if (res.rank() == Rank.Mayor) {
@@ -125,7 +119,7 @@ public class MyTownResident {
                         .name()));
                 t.removeResident(res);
             } else if (args[0].equalsIgnoreCase(Term.TownCmdOnline.toString())) {
-                Assert.Perm(cs, "mytown.cmd.online");
+                Assert.Perm(cs, "mytown.cmd.online | mytown.cmd.*");
                 handled = true;
 
                 Town t = res.town();
@@ -170,23 +164,21 @@ public class MyTownResident {
 
                 if (args.length < 3) // show
                 {
-                    Assert.Perm(cs, "mytown.cmd.perm.show." + node);
+                    Assert.Perm(cs, "mytown.cmd.perm.show." + node + " | mytown.cmd.*");
                     showPermissions(cs, res, node);
                 } else {
                     String action = args[2];
                     if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set
                             .toString())
                             && args.length > 3) {
-                        Assert.Perm(cs, "mytown.cmd.perm.set." + node + "."
-                                + args[3]);
+                        Assert.Perm(cs, "mytown.cmd.perm.set." + node + "." + args[3] + " | mytown.cmd.*");
 
                         setPermissions(cs, res, node, args[3],
                                 args.length > 4 ? args[4] : null);
                     } else if (action
                             .equalsIgnoreCase(Term.TownCmdPermArgs2Force
                                     .toString())) {
-                        Assert.Perm(cs, "mytown.cmd.perm.force." + node + "."
-                                + (args.length > 3 ? args[3] : "all"));
+                        Assert.Perm(cs, "mytown.cmd.perm.force." + node + "." + (args.length > 3 ? args[3] : "all") + " | mytown.cmd.*");
 
                         flushPermissions(cs, res, node,
                                 args.length > 3 ? args[3] : null);
@@ -236,22 +228,17 @@ public class MyTownResident {
         return set;
     }
 
-    private static void showPermissions(ICommandSender sender, Resident res,
-            String node) throws CommandException {
+    private static void showPermissions(ICommandSender sender, Resident res, String node) throws CommandException {
         TownSettingCollection set = getPermNode(node, res);
 
         String title = "";
         if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
-            title = "your town '" + res.town().name()
-                    + "' (default for residents)";
-        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsResident
-                .toString())) {
+            title = "your town '" + res.town().name() + "' (default for residents)";
+        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString())) {
             title = "you '" + res.name() + "'";
         } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
             TownBlock block = (TownBlock) set.tag;
-            title = String.format("the plot @ dim %s, %s,%s owned by '%s'",
-                    block.worldDimension(), block.x(), block.z(), block
-                            .ownerDisplay());
+            title = String.format("the plot @ dim %s, %s,%s owned by '%s'", block.worldDimension(), block.x(), block.z(), block.ownerDisplay());
         }
 
         set.show(sender, title, node, false);

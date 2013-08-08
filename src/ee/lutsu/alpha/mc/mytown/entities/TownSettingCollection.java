@@ -234,22 +234,13 @@ public class TownSettingCollection {
     }
 
     public void show(ICommandSender cs, String title, String node, boolean all) {
-        cs.sendChatToPlayer(String.format("§6-- §ePermissions for %s§6 --",
-                title));
+        cs.sendChatToPlayer(String.format("§6-- §ePermissions for %s§6 --", title));
 
         for (TownSetting set : settings) {
             if (!isWild || set.wildValue != null) {
                 EntityPlayer p = (EntityPlayer) cs;
-                if (all
-                        || ForgePerms.getPermissionsHandler().canAccess(
-                                p.username,
-                                p.worldObj.provider.getDimensionName(),
-                                "mytown.cmd.perm.set." + node + "."
-                                        + set.getSerializationKey())) {
-                    cs.sendChatToPlayer(String.format("§a%s §2[%s] : %s%s", set
-                            .getName(), set.getSerializationKey(),
-                            set.value == null ? "§d" : "§c", set
-                                    .getVisualValue()));
+                if (all || ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set." + node + "." + set.getSerializationKey()) || ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set.*")) {
+                    cs.sendChatToPlayer(String.format("§a%s §2[%s] : %s%s", set.getName(), set.getSerializationKey(), set.value == null ? "§d" : "§c", set.getVisualValue()));
                 }
             }
         }

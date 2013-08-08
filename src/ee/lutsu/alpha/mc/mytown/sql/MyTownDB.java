@@ -67,8 +67,7 @@ public abstract class MyTownDB extends Database {
         doUpdate(codes, "20.11.2012", "Creates 'Towns' table");
         doUpdate(codes, "21.11.2012", "Adds 'Extra' field to 'Towns' table");
         doUpdate(codes, "13.12.2012", "Creates 'Residents' table");
-        doUpdate(codes, "14.12.2012",
-                "Adds 'Friends' field to 'Residents' table");
+        doUpdate(codes, "14.12.2012", "Adds 'Friends' field to 'Residents' table");
         doUpdate(codes, "16.12.2012", "Creates 'Nations' table");
         doUpdate(codes, "27.02.2013", "Adds 'Homes' field to 'Residents' table");
     }

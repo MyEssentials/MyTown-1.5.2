@@ -29,14 +29,11 @@ public class SteveCarts extends ProtBase {
         clSteveCart = Class.forName("vswe.stevescarts.Carts.MinecartModular");
         fWorkModules = clSteveCart.getDeclaredField("workModules");
 
-        Class c = Class
-                .forName("vswe.stevescarts.Modules.Workers.ModuleWorker");
+        Class c = Class.forName("vswe.stevescarts.Modules.Workers.ModuleWorker");
         mGetNextblock = c.getDeclaredMethod("getNextblock");
 
-        clRailer = Class
-                .forName("vswe.stevescarts.Modules.Workers.ModuleRailer");
-        clMiner = Class
-                .forName("vswe.stevescarts.Modules.Workers.Tools.ModuleTool");
+        clRailer = Class.forName("vswe.stevescarts.Modules.Workers.ModuleRailer");
+        clMiner = Class.forName("vswe.stevescarts.Modules.Workers.Tools.ModuleTool");
     }
 
     @Override

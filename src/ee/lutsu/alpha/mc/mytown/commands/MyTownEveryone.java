@@ -132,7 +132,7 @@ public class MyTownEveryone {
                         Term.TownCmdSpawnDesc.toString(), color));
             } else if (args.length > 0
                     && args[0].equalsIgnoreCase(Term.TownCmdMap.toString())) {
-                Assert.Perm(cs, "mytown.cmd.map");
+                Assert.Perm(cs, "mytown.cmd.map | mytown.cmd.*");
                 handled = true;
 
                 if (args.length > 1) {
@@ -160,7 +160,7 @@ public class MyTownEveryone {
                 }
             } else if (args.length > 0
                     && args[0].equalsIgnoreCase(Term.TownCmdInfo.toString())) {
-                Assert.Perm(cs, "mytown.cmd.info");
+                Assert.Perm(cs, "mytown.cmd.info | mytown.cmd.*");
                 handled = true;
 
                 if (args.length == 2) {
@@ -177,15 +177,13 @@ public class MyTownEveryone {
                                     .toString(), Term.TownCmdInfoDesc
                                     .toString(), color));
                 }
-            } else if (args.length > 0
-                    && args[0].equalsIgnoreCase(Term.TownCmdFriend.toString())) {
-                Assert.Perm(cs, "mytown.cmd.friend");
+            } else if (args.length > 0 && args[0].equalsIgnoreCase(Term.TownCmdFriend.toString())) {
+                Assert.Perm(cs, "mytown.cmd.friend | mytown.cmd.*");
                 handled = true;
 
                 if (args.length == 3) {
                     String cmd = args[1];
-                    Resident target = MyTownDatasource.instance
-                            .getResident(args[2]);
+                    Resident target = MyTownDatasource.instance.getResident(args[2]);
                     if (target == null) {
                         throw new CommandException(Term.TownErrPlayerNotFound);
                     }
@@ -193,24 +191,16 @@ public class MyTownEveryone {
                     if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsAdd
                             .toString())) {
                         if (!res.addFriend(target)) {
-                            throw new CommandException(
-                                    Term.ErrPlayerAlreadyInFriendList, res
-                                            .name());
+                            throw new CommandException(Term.ErrPlayerAlreadyInFriendList, target.name());
                         }
-                    } else if (cmd
-                            .equalsIgnoreCase(Term.TownCmdFriendArgsRemove
-                                    .toString())) {
+                    } else if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsRemove.toString())) {
                         if (!res.removeFriend(target)) {
-                            throw new CommandException(
-                                    Term.ErrPlayerNotInFriendList, res.name());
+                            throw new CommandException(Term.ErrPlayerNotInFriendList, target.name());
                         }
                     }
                     res.sendInfoTo(cs, res.shouldShowPlayerLocation());
                 } else {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdFriend.toString(),
-                            Term.TownCmdFriendArgs.toString(),
-                            Term.TownCmdFriendDesc.toString(), color));
+                    cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdFriend.toString(), Term.TownCmdFriendArgs.toString(), Term.TownCmdFriendDesc.toString(), color));
                 }
             } else if (args.length > 0
                     && args[0].equals(Term.TownCmdSpawn.toString())) {
@@ -237,10 +227,10 @@ public class MyTownEveryone {
 
                 ItemStack cost = null;
                 if (target == res.town()) {
-                    Assert.Perm(cs, "mytown.cmd.spawn.own");
+                    Assert.Perm(cs, "mytown.cmd.spawn.own | mytown.cmd.spawn.* | mytown.cmd.*");
                     cost = Cost.TownSpawnTeleportOwn.item;
                 } else {
-                    Assert.Perm(cs, "mytown.cmd.spawn.other");
+                    Assert.Perm(cs, "mytown.cmd.spawn.other | mytown.cmd.spawn.* | mytown.cmd.*");
                     cost = Cost.TownSpawnTeleportOther.item;
                 }
 
@@ -268,7 +258,7 @@ public class MyTownEveryone {
                         Term.TownCmdResDesc.toString(), null));
             } else if (args.length > 0
                     && args[0].equalsIgnoreCase(Term.TownCmdInfo.toString())) {
-                Assert.Perm(cs, "mytown.cmd.info");
+                Assert.Perm(cs, "mytown.cmd.info | mytown.cmd.*");
                 handled = true;
 
                 if (args.length == 2) {
@@ -289,7 +279,7 @@ public class MyTownEveryone {
         }
 
         if (args.length > 0 && args[0].equals(Term.TownCmdList.toString())) {
-            Assert.Perm(cs, "mytown.cmd.list");
+            Assert.Perm(cs, "mytown.cmd.list | mytown.cmd.*");
             handled = true;
 
             ArrayList<Town> sorted = new ArrayList<Town>(
@@ -298,8 +288,7 @@ public class MyTownEveryone {
             Collections.sort(sorted, new Comparator<Town>() {
                 @Override
                 public int compare(Town arg0, Town arg1) {
-                    return Integer.compare(arg1.residents().size(), arg0
-                            .residents().size());
+                    return Integer.compare(arg1.residents().size(), arg0.residents().size());
                 }
             });
 
@@ -327,7 +316,7 @@ public class MyTownEveryone {
             }
         } else if (args.length > 0
                 && args[0].equals(Term.TownCmdRes.toString())) {
-            Assert.Perm(cs, "mytown.cmd.res");
+            Assert.Perm(cs, "mytown.cmd.res | mytown.cmd.*");
             handled = true;
 
             if (args.length == 1 && cs instanceof EntityPlayer) {
