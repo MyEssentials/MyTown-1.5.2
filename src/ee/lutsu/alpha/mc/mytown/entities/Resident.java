@@ -255,8 +255,7 @@ public class Resident {
         return canInteract(targetBlock, askedFor);
     }
 
-    public boolean canInteract(int dimension, int x, int yFrom, int yTo, int z,
-            TownSettingCollection.Permissions askedFor) {
+    public boolean canInteract(int dimension, int x, int yFrom, int yTo, int z, TownSettingCollection.Permissions askedFor) {
         TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(
                 dimension, x, yFrom, yTo, z);
         if (targetBlock == null || targetBlock.town() == null) {

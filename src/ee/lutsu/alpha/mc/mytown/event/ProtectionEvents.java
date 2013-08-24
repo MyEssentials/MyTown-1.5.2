@@ -43,6 +43,7 @@ import ee.lutsu.alpha.mc.mytown.event.prot.TNT;
 import ee.lutsu.alpha.mc.mytown.event.prot.ThaumCraft;
 import ee.lutsu.alpha.mc.mytown.event.prot.TinkersConstruct;
 import ee.lutsu.alpha.mc.mytown.event.prot.TrainCraft;
+import ee.lutsu.alpha.mc.mytown.event.prot.TwilightForest;
 
 public class ProtectionEvents implements ITickHandler {
     public static ArrayList<ProtBase> entityProtections = new ArrayList<ProtBase>();
@@ -189,8 +190,7 @@ public class ProtectionEvents implements ITickHandler {
                 if (e instanceof EntityPlayer) {
                     EntityPlayer pl = (EntityPlayer) e;
                     if (pl.isUsingItem()) {
-                        Resident r = MyTownDatasource.instance
-                                .getOrMakeResident(pl);
+                        Resident r = MyTownDatasource.instance.getOrMakeResident(pl);
                         if (!ProtectionEvents.instance.itemUsed(r)) {
                             r.onlinePlayer.stopUsingItem();
                         }

@@ -120,7 +120,7 @@ public class MyTownMayor {
                         color));
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdAssistant.toString())) {
-            Assert.Perm(cs, "mytown.cmd.assistant | mytown.cmd.*");
+            Assert.Perm(cs, "mytown.cmd.assistant");
             handled = true;
 
             if (args.length != 3) {
@@ -180,7 +180,7 @@ public class MyTownMayor {
                 }
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdMayor.toString())) {
-            Assert.Perm(cs, "mytown.cmd.mayor | mytown.cmd.*");
+            Assert.Perm(cs, "mytown.cmd.mayor");
             handled = true;
 
             if (args.length != 2) {
@@ -216,7 +216,7 @@ public class MyTownMayor {
                         Term.TownPlayerPromotedToMayor.toString(r.name()));
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdDelete.toString())) {
-            Assert.Perm(cs, "mytown.cmd.delete | mytown.cmd.*");
+            Assert.Perm(cs, "mytown.cmd.delete");
             handled = true;
 
             if (args.length == 2 && args[1].equalsIgnoreCase("ok")) {
@@ -235,7 +235,7 @@ public class MyTownMayor {
                 cs.sendChatToPlayer(Term.TownCmdDeleteAction.toString());
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdRename.toString())) {
-            Assert.Perm(cs, "mytown.cmd.rename | mytown.cmd.*");
+            Assert.Perm(cs, "mytown.cmd.rename");
             handled = true;
 
             if (args.length == 2) {

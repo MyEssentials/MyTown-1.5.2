@@ -34,7 +34,6 @@ public class TinkersConstruct extends ProtBase {
                 for (int x=-1; x<=1; x++){
                     Log.info("Checking (%s, %s, %s)", pos2.xCoord+x, pos2.yCoord, pos2.zCoord+z);
                     if (!res.canInteract((int)pos2.xCoord+x, (int)pos2.yCoord, (int)pos2.zCoord+z, Permissions.Build)){
-                        Log.info("Hit something!");
                         return "Cannot attack here";
                     }
                 }
