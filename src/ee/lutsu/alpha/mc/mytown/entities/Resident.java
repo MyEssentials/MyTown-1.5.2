@@ -441,13 +441,23 @@ public class Resident {
     public String prefix() {
         String w = onlinePlayer != null ? String
                 .valueOf(onlinePlayer.dimension) : null;
-        return ForgePerms.getPermissionsHandler().getPrefix(name(), w);
+        
+        String prefix = ForgePerms.getPermissionsHandler().getPrefix(name(), w);
+        if (prefix != null) {
+          prefix = Formatter.applyColorCodes(prefix);
+        }
+        return prefix;
     }
 
     public String postfix() {
         String w = onlinePlayer != null ? String
-                .valueOf(onlinePlayer.dimension) : null;
-        return ForgePerms.getPermissionsHandler().getPostfix(name(), w);
+                .valueOf(onlinePlayer.dimension) : null;        
+        
+        String postfix = ForgePerms.getPermissionsHandler().getPostfix(name(), w);
+        if (postfix != null) {
+            postfix = Formatter.applyColorCodes(postfix);
+        }
+        return postfix;
     }
 
     public static Resident loadFromDB(int id, String name, Town town, Rank r,

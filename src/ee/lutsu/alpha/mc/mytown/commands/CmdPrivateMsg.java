@@ -88,7 +88,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
         if (ForgePerms.getPermissionsHandler().canAccess(sender.username,
                 sender.worldObj.provider.getDimensionName(),
                 "mytown.chat.allowcolors")) {
-            msg = Formatter.dollarToColorPrefix(msg);
+            msg = Formatter.applyColorCodes(msg);
         }
 
         for (ICommandSender cs : snoopers) {

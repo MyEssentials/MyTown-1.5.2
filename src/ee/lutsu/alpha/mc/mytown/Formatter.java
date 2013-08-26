@@ -8,8 +8,13 @@ import ee.lutsu.alpha.mc.mytown.entities.Resident;
 
 public class Formatter {
     public static boolean formatChat = true;
-    private static final Pattern color_pattern = Pattern
+    public static String colorPrefix = "$";
+    private static Pattern colorPattern = Pattern
             .compile("(?i)\\$([0-9A-FK-OR])");
+    
+    public static void generateColorPattern() {
+        colorPattern = Pattern.compile("(?i)" + Pattern.quote(colorPrefix) + "([0-9A-FK-OR])");
+    }
 
     public static String formatLevel(Level lvl) {
         if (lvl == Level.SEVERE) {
@@ -110,12 +115,12 @@ public class Formatter {
         }
     }
 
-    public static String dollarToColorPrefix(String str) {
+    public static String applyColorCodes(String str) {
         if (str == null || str.equals("")) {
             return "";
         }
 
-        Matcher m = color_pattern.matcher(str);
+        Matcher m = colorPattern.matcher(str);
         String s = str;
 
         while (m.find()) {
