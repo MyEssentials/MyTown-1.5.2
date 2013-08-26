@@ -321,6 +321,12 @@ public class MyTown {
         prop.comment = "Setting this stops player messages from using the MyTown channel functionality.\n";
         prop.comment += "Explicit call of channel commands (/g, /h, etc.) still works unless disabled separatedly";
         PlayerEvents.disableAutoChatChannelUsage = prop.getBoolean(false);
+        
+        prop = config.get("Chat", "TextColoringPrefix", "$");
+        prop.comment = "This is the prefix used for color codes in chat. Default value $\n";
+        prop.comment += "When using with Bukkit plugins, it's recommended to change this to &";
+        Formatter.colorPrefix = prop.getString();
+        Formatter.generateColorPattern();
 
         prop = config.get("Chat", "FormatChat", true);
         prop.comment = "Should the chat be formatted";

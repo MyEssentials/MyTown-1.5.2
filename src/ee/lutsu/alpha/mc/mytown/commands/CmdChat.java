@@ -198,7 +198,7 @@ public class CmdChat extends CommandBase {
         }
 
         if (ForgePerms.getPermissionsHandler().canAccess(sender.onlinePlayer.username, sender.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
-            msg = Formatter.dollarToColorPrefix(msg);
+            msg = Formatter.applyColorCodes(msg);
         }
 
         String s;
