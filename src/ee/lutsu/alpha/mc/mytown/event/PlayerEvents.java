@@ -48,6 +48,9 @@ import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.Permissions;
 import ee.lutsu.alpha.mc.mytown.event.tick.WorldBorder;
 
 public class PlayerEvents implements IPlayerTracker {
+
+    public static boolean disableAutoChatChannelUsage = false;
+
     @ForgeSubscribe(priority = EventPriority.HIGHEST)
     public void interact(PlayerInteractEvent ev) {
         if (ev.isCanceled()) {
@@ -55,8 +58,7 @@ public class PlayerEvents implements IPlayerTracker {
         }
 
         Resident r = source().getOrMakeResident(ev.entityPlayer);
-        if (ev.action == Action.RIGHT_CLICK_AIR
-                || ev.action == Action.RIGHT_CLICK_BLOCK) {
+        if (ev.action == Action.RIGHT_CLICK_AIR || ev.action == Action.RIGHT_CLICK_BLOCK) {
             if (r.pay.tryPayByHand()) {
                 ev.setCanceled(true);
                 r.onlinePlayer.stopUsingItem();
@@ -77,21 +79,15 @@ public class PlayerEvents implements IPlayerTracker {
 
         if (action == Action.RIGHT_CLICK_AIR) // entity or air click
         {
-            if (ev.entityPlayer.getHeldItem() != null
-                    && ev.entityPlayer.getHeldItem().getItem() != null) {
+            if (ev.entityPlayer.getHeldItem() != null && ev.entityPlayer.getHeldItem().getItem() != null) {
                 Item item = ev.entityPlayer.getHeldItem().getItem();
-                MovingObjectPosition pos = Utils
-                        .getMovingObjectPositionFromPlayer(
-                                r.onlinePlayer.worldObj, r.onlinePlayer, false);
+                MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(r.onlinePlayer.worldObj,
+                        r.onlinePlayer, false);
                 if (pos == null) {
-                    if (item instanceof ItemBow
-                            || item instanceof ItemEgg
-                            || item instanceof ItemPotion
-                            || item instanceof ItemFishingRod
-                            || item instanceof ItemExpBottle
+                    if (item instanceof ItemBow || item instanceof ItemEgg || item instanceof ItemPotion
+                            || item instanceof ItemFishingRod || item instanceof ItemExpBottle
                             || item instanceof ItemEnderEye
-                            || item.getClass().getSimpleName()
-                                    .equalsIgnoreCase("ItemNanoBow")) {
+                            || item.getClass().getSimpleName().equalsIgnoreCase("ItemNanoBow")) {
                         perm = Permissions.Build;
                     } else {
                         return;
@@ -117,32 +113,25 @@ public class PlayerEvents implements IPlayerTracker {
             }
         }
 
-        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(
-                ev.entityPlayer.dimension, x, y, z);
+        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(ev.entityPlayer.dimension, x, y, z);
 
         if (action == Action.RIGHT_CLICK_BLOCK
                 && ev.entityPlayer.getHeldItem() != null
                 && ev.entityPlayer.getHeldItem().getItem() != null
-                && (ev.entityPlayer.getHeldItem().getItem() instanceof ItemMinecart || ItemIdRange
-                        .contains(MyTown.instance.carts, ev.entityPlayer
-                                .getHeldItem()))) {
+                && (ev.entityPlayer.getHeldItem().getItem() instanceof ItemMinecart || ItemIdRange.contains(
+                        MyTown.instance.carts, ev.entityPlayer.getHeldItem()))) {
             int en = ev.entityPlayer.worldObj.getBlockId(x, y, z);
             if (Block.blocksList[en] instanceof BlockRail) {
-                if (targetBlock != null
-                        && targetBlock.town() != null
-                        && targetBlock.settings.allowCartInteraction
+                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowCartInteraction
                         || (targetBlock == null || targetBlock.town() == null)
-                        && MyTown.instance
-                                .getWorldWildSettings(ev.entityPlayer.dimension).allowCartInteraction) {
+                        && MyTown.instance.getWorldWildSettings(ev.entityPlayer.dimension).allowCartInteraction) {
                     return;
                 }
             }
         } else if (action == Action.RIGHT_CLICK_BLOCK) {
             if (!r.onlinePlayer.isSneaking()) {
-                TileEntity te = r.onlinePlayer.worldObj.getBlockTileEntity(x,
-                        y, z);
-                if (te != null && te instanceof IInventory
-                        && ((IInventory) te).isUseableByPlayer(r.onlinePlayer)) {
+                TileEntity te = r.onlinePlayer.worldObj.getBlockTileEntity(x, y, z);
+                if (te != null && te instanceof IInventory && ((IInventory) te).isUseableByPlayer(r.onlinePlayer)) {
                     perm = Permissions.Access;
                 }
             }
@@ -166,8 +155,7 @@ public class PlayerEvents implements IPlayerTracker {
              */
 
             // placing a block
-            if (ev.face != -1 && perm == Permissions.Build && item != null
-                    && item instanceof ItemBlock) {
+            if (ev.face != -1 && perm == Permissions.Build && item != null && item instanceof ItemBlock) {
                 if (ev.face == 0) {
                     y--;
                 } else if (ev.face == 1) {
@@ -182,8 +170,7 @@ public class PlayerEvents implements IPlayerTracker {
                     x++;
                 }
 
-                targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(
-                        ev.entityPlayer.dimension, x, y, z);
+                targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(ev.entityPlayer.dimension, x, y, z);
             }
         }
 
@@ -194,8 +181,8 @@ public class PlayerEvents implements IPlayerTracker {
                 World w = ev.entityPlayer.worldObj;
                 // Log.info("Block is %s:%s", w.getBlockId(x, y, z),
                 // w.getBlockMetadata(x, y, z));
-                if (ItemIdRange.contains(MyTown.instance.leftClickAccessBlocks,
-                        w.getBlockId(x, y, z), w.getBlockMetadata(x, y, z))) {
+                if (ItemIdRange.contains(MyTown.instance.leftClickAccessBlocks, w.getBlockId(x, y, z),
+                        w.getBlockMetadata(x, y, z))) {
                     perm = Permissions.Access;
                     if (r.canInteract(targetBlock, perm)) {
                         return;
@@ -206,11 +193,9 @@ public class PlayerEvents implements IPlayerTracker {
             r.onlinePlayer.stopUsingItem();
             ev.setCanceled(true);
             if (perm == Permissions.Access) {
-                ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotAccessHere
-                        .toString());
+                ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotAccessHere.toString());
             } else {
-                ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotBuildHere
-                        .toString());
+                ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotBuildHere.toString());
             }
         }
     }
@@ -226,8 +211,7 @@ public class PlayerEvents implements IPlayerTracker {
         if (!r.canInteract(ev.item)) {
             long time = System.currentTimeMillis();
             if (time > r.pickupWarningCooldown) {
-                ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotPickup
-                        .toString());
+                ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotPickup.toString());
                 r.pickupWarningCooldown = time + Resident.pickupSpamCooldown;
             }
             ev.setCanceled(true);
@@ -243,8 +227,7 @@ public class PlayerEvents implements IPlayerTracker {
         Resident attacker = source().getOrMakeResident(ev.entityPlayer);
 
         if (!attacker.canAttack(ev.target)) {
-            ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotAttack
-                    .toString());
+            ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotAttack.toString());
             ev.setCanceled(true);
         }
     }
@@ -256,13 +239,10 @@ public class PlayerEvents implements IPlayerTracker {
         }
 
         if (ev.entityLiving instanceof EntityPlayer) {
-            Resident t = source().getOrMakeResident(
-                    (EntityPlayer) ev.entityLiving);
+            Resident t = source().getOrMakeResident((EntityPlayer) ev.entityLiving);
 
-            if (ev.source.getEntity() != null
-                    && !t.canBeAttackedBy(ev.source.getEntity())
-                    || ev.source.getSourceOfDamage() != null
-                    && !t.canBeAttackedBy(ev.source.getSourceOfDamage())) {
+            if (ev.source.getEntity() != null && !t.canBeAttackedBy(ev.source.getEntity())
+                    || ev.source.getSourceOfDamage() != null && !t.canBeAttackedBy(ev.source.getSourceOfDamage())) {
                 ev.setCanceled(true);
                 // spamming
                 /*
@@ -277,16 +257,12 @@ public class PlayerEvents implements IPlayerTracker {
         Entity target = ev.entity;
         Resident attacker = null;
 
-        if (ev.source.getEntity() != null
-                && ev.source.getEntity() instanceof EntityPlayer) {
-            attacker = source().getOrMakeResident(
-                    (EntityPlayer) ev.source.getEntity());
+        if (ev.source.getEntity() != null && ev.source.getEntity() instanceof EntityPlayer) {
+            attacker = source().getOrMakeResident((EntityPlayer) ev.source.getEntity());
         }
 
-        if (ev.source.getSourceOfDamage() != null
-                && ev.source.getSourceOfDamage() instanceof EntityPlayer) {
-            attacker = source().getOrMakeResident(
-                    (EntityPlayer) ev.source.getSourceOfDamage());
+        if (ev.source.getSourceOfDamage() != null && ev.source.getSourceOfDamage() instanceof EntityPlayer) {
+            attacker = source().getOrMakeResident((EntityPlayer) ev.source.getSourceOfDamage());
         }
 
         if (!attacker.isOnline()) {
@@ -295,8 +271,7 @@ public class PlayerEvents implements IPlayerTracker {
         }
 
         if (!attacker.canAttack(target)) {
-            attacker.onlinePlayer.sendChatToPlayer(Term.ErrPermCannotAttack
-                    .toString());
+            attacker.onlinePlayer.sendChatToPlayer(Term.ErrPermCannotAttack.toString());
             ev.setCanceled(true);
             return;
         }
@@ -311,8 +286,7 @@ public class PlayerEvents implements IPlayerTracker {
         Resident r = source().getOrMakeResident(ev.entityPlayer);
 
         if (!r.canInteract(ev.target)) {
-            ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotInteract
-                    .toString());
+            ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotInteract.toString());
             ev.setCanceled(true);
         }
     }
@@ -325,20 +299,16 @@ public class PlayerEvents implements IPlayerTracker {
 
         Resident r = source().getOrMakeResident((EntityPlayer) ev.collider);
 
-        TownBlock t = source().getBlock(r.onlinePlayer.dimension,
-                ev.minecart.chunkCoordX, ev.minecart.chunkCoordZ);
+        TownBlock t = source().getBlock(r.onlinePlayer.dimension, ev.minecart.chunkCoordX, ev.minecart.chunkCoordZ);
 
-        if (t == null || t.town() == null || t.town() == r.town()
-                || t.settings.allowCartInteraction) {
+        if (t == null || t.town() == null || t.town() == r.town() || t.settings.allowCartInteraction) {
             return;
         }
 
         long time = System.currentTimeMillis();
         if (t.town().minecraftNotificationTime < time) {
-            t.town().minecraftNotificationTime = time
-                    + Town.dontSendCartNotification;
-            t.town().sendNotification(Level.WARNING,
-                    Term.MinecartMessedWith.toString());
+            t.town().minecraftNotificationTime = time + Town.dontSendCartNotification;
+            t.town().sendNotification(Level.WARNING, Term.MinecartMessedWith.toString());
         }
     }
 
@@ -352,24 +322,20 @@ public class PlayerEvents implements IPlayerTracker {
         Resident r = source().getOrMakeResident(player);
 
         if (!WorldBorder.instance.isWithinArea(player)) {
-            Log.warning(String
-                    .format("Player %s logged in over the world edge %s (%s, %s, %s). Sending to spawn.",
-                            r.name(), player.dimension, player.posX,
-                            player.posY, player.posZ));
+            Log.warning(String.format("Player %s logged in over the world edge %s (%s, %s, %s). Sending to spawn.",
+                    r.name(), player.dimension, player.posX, player.posY, player.posZ));
             r.respawnPlayer();
         }
 
-        TownBlock t = source().getBlock(r.onlinePlayer.dimension,
-                player.chunkCoordX, player.chunkCoordZ);
+        TownBlock t = source().getBlock(r.onlinePlayer.dimension, player.chunkCoordX, player.chunkCoordZ);
 
         r.location = t != null && t.town() != null ? t.town() : null;
         r.location2 = t != null && t.town() != null ? t.owner() : null;
 
         if (!r.canInteract(t, (int) player.posY, Permissions.Enter)) {
-            Log.warning(String
-                    .format("Player %s logged in at a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.",
-                            r.name(), r.location.name(), player.dimension,
-                            player.posX, player.posY, player.posZ));
+            Log.warning(String.format(
+                    "Player %s logged in at a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.",
+                    r.name(), r.location.name(), player.dimension, player.posX, player.posY, player.posZ));
             r.respawnPlayer();
         }
 
@@ -392,20 +358,23 @@ public class PlayerEvents implements IPlayerTracker {
     }
 
     @Override
-    public void onPlayerChangedDimension(EntityPlayer player) {}
+    public void onPlayerChangedDimension(EntityPlayer player) {
+    }
 
     @Override
-    public void onPlayerRespawn(EntityPlayer player) {}
+    public void onPlayerRespawn(EntityPlayer player) {
+    }
 
     @ForgeSubscribe
     public void serverChat(ServerChatEvent ev) {
         if (ev.isCanceled() || ev.message == null || ev.message.trim().length() < 1 || !Formatter.formatChat) {
             return;
         }
-
-        ev.setCanceled(true);
-        Resident res = source().getOrMakeResident(ev.player);
-        CmdChat.sendToChannelFromDirectTalk(res, ev.message, res.activeChannel, false);
+        if (!disableAutoChatChannelUsage) {
+            ev.setCanceled(true);
+            Resident res = source().getOrMakeResident(ev.player);
+            CmdChat.sendToChannelFromDirectTalk(res, ev.message, res.activeChannel, false);
+        }
     }
 
     @ForgeSubscribe
@@ -416,8 +385,7 @@ public class PlayerEvents implements IPlayerTracker {
 
         // so we don't re-link to player to be online
         // as this is called after the player logs off
-        Resident res = source().getOrMakeResident(
-                (EntityPlayer) ev.entityLiving);
+        Resident res = source().getOrMakeResident((EntityPlayer) ev.entityLiving);
 
         if (res != null && res.isOnline()) {
             res.update();
