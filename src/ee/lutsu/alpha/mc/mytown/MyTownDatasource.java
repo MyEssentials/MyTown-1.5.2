@@ -18,9 +18,9 @@ public class MyTownDatasource extends MyTownDB {
 	public static MyTownDatasource instance = new MyTownDatasource();
 
 	public HashMap<String, Resident> residents = new HashMap<String, Resident>();
-	public HashSet<Town> towns = new HashSet<Town>();
+	public HashMap<String, Town> towns = new HashMap<String, Town>();
 	public HashMap<String, TownBlock> blocks = new HashMap<String, TownBlock>();
-	public HashSet<Nation> nations = new HashSet<Nation>();
+	public HashMap<String, Nation> nations = new HashMap<String, Nation>();
 	
 	public String getTownBlockKey(int dim, int x, int z) {
 		return dim + ";" + x + ";" + z;
@@ -33,18 +33,18 @@ public class MyTownDatasource extends MyTownDB {
 
 	public void init() throws Exception {
 		residents = new HashMap<String, Resident>();
-		towns = new HashSet<Town>();
+		towns = new HashMap<String, Town>();
 		blocks = new HashMap<String, TownBlock>();
-		nations = new HashSet<Nation>();
+		nations = new HashMap<String, Nation>();
 
 		dispose();
 		connect();
 		load();
 
-		towns.addAll(loadTowns());
+		towns.putAll(loadTowns());
 		residents.putAll(loadResidents()); // links to towns
 
-		for (Town t : towns) {
+		for (Town t : towns.values()) {
 			for (TownBlock res : t.blocks()) {
 				if (res.owner_name != null) // map block owners
 				{
@@ -57,7 +57,7 @@ public class MyTownDatasource extends MyTownDB {
 			}
 		}
 
-		nations.addAll(loadNations());
+		nations.putAll(loadNations());
 
 		addAllOnlinePlayers();
 	}
@@ -70,33 +70,25 @@ public class MyTownDatasource extends MyTownDB {
 	}
 
 	public void addTown(Town t) {
-		towns.add(t);
+		towns.put(t.name().toLowerCase(), t);
 	}
 
 	public void addNation(Nation n) {
-		nations.add(n);
+		nations.put(n.name().toLowerCase(), n);
 	}
 
 	public TownBlock getOrMakeBlock(int world_dimension, int x, int z) {
-		long start = System.nanoTime();
+
 		TownBlock res = blocks.get(getTownBlockKey(world_dimension, x, z));
 		if (res == null) {
 			res = new TownBlock(world_dimension, x, z);
 			blocks.put(getTownBlockKey(world_dimension, x, z), res);
 		}
-
-		long stop = System.nanoTime();
-		Log.info("getOrMakeBlock took: %d", stop - start);
 		return res;
 	}
 
 	public TownBlock getBlock(int world_dimension, int x, int z) {
-		long start = System.nanoTime();
-		TownBlock res = blocks.get(getTownBlockKey(world_dimension, x, z));
-
-		long stop = System.nanoTime();
-		Log.info("getBlock took: %d", stop - start);
-		return res;
+	    return blocks.get(getTownBlockKey(world_dimension, x, z));
 	}
 
 	public TownBlock getPermBlockAtCoord(int world_dimension, int x, int y, int z) {
@@ -115,82 +107,45 @@ public class MyTownDatasource extends MyTownDB {
 	}
 
 	public Town getTown(String name) {
-		long start = System.nanoTime();
-		for (Town res : towns) {
-			if (res.name().equalsIgnoreCase(name)) {
-				long stop = System.nanoTime();
-				Log.info("getTown took: %d", stop - start);
-				return res;
-			}
-		}
-		
-		long stop = System.nanoTime();
-		Log.info("getTown took: %d", stop - start);
-
-		return null;
+	    return towns.get(name.toLowerCase());
 	}
 
 	@Override
 	public Town getTown(int id) {
-		long start = System.nanoTime();
-		for (Town res : towns) {
-			if (res.id() == id) {
-				long stop = System.nanoTime();
-				Log.info("getTown took: %d", stop - start);
+		for (Town res : towns.values()) {
+			if (res.id() == id) {	
 				return res;
 			}
 		}
-		long stop = System.nanoTime();
-		Log.info("getTown took: %d", stop - start);
-
 		return null;
 	}
 
 	public Nation getNation(String name) {
-		for (Nation res : nations) {
-			if (res.name().equalsIgnoreCase(name)) {
-				return res;
-			}
-		}
-
-		return null;
+	    return nations.get(name.toLowerCase());
 	}
 
 	public synchronized Resident getOrMakeResident(EntityPlayer player) {
-		long start = System.nanoTime();
 		Resident res = residents.get(player.getEntityName().toLowerCase());
 
 		if (res == null) {
 			res = makeResident(player.getEntityName());
 		}
 		res.onlinePlayer = player;
-		long stop = System.nanoTime();
-		Log.info("getOrMakeResident took: %d", stop - start);
 		return res;
 	}
 
-	public Resident getResident(EntityPlayer player) {
-		long start = System.nanoTime();
-		
-		Resident res = residents.get(player.getEntityName().toLowerCase());
-		
-		long stop = System.nanoTime();
-		Log.info("getResident took: %d", stop - start);
-
-		return res;
+	public Resident getResident(EntityPlayer player) {	
+	    return residents.get(player.getEntityName().toLowerCase());
 	}
 
 	public Resident getOrMakeResident(String name) // case in-sensitive
 	{
-		long start = System.nanoTime();
 		Resident res = residents.get(name.toLowerCase());
 
 		if (res == null) {
 			res = makeResident(name);
 		}
 		
-		long stop = System.nanoTime();
-		Log.info("getOrMakeResident took: %d", stop - start);
 		return res;
 	}
 	

@@ -261,20 +261,21 @@ public abstract class MyTownDB extends Database {
         statement.executeUpdate();
     }
 
-    public List<Nation> loadNations() // has to happen after town load
+    public Map<String, Nation> loadNations() // has to happen after town load
     {
         synchronized (lock) {
             ResultSet set = null;
-            List<Nation> nations = new ArrayList<Nation>();
+            Map<String, Nation> nations = new HashMap<String, Nation>();
             try {
                 PreparedStatement statement = prepare("SELECT * FROM " + prefix
                         + "nations");
                 set = statement.executeQuery();
 
                 while (set.next()) {
-                    nations.add(Nation.sqlLoad(set.getInt("Id"), set
+                    Nation nation = Nation.sqlLoad(set.getInt("Id"), set
                             .getString("Name"), set.getInt("Capital"), set
-                            .getString("Towns"), set.getString("Extra")));
+                            .getString("Towns"), set.getString("Extra"));
+                    nations.put(nation.name().toLowerCase(), nation);
                 }
             } catch (Exception e) {
                 printException(e);
@@ -594,19 +595,20 @@ public abstract class MyTownDB extends Database {
         }
     }
 
-    public List<Town> loadTowns() {
+    public Map<String, Town> loadTowns() {
         synchronized (lock) {
             ResultSet set = null;
-            List<Town> towns = new ArrayList<Town>();
+            Map<String, Town> towns = new HashMap<String, Town>();
             try {
                 PreparedStatement statement = prepare("SELECT * FROM " + prefix
                         + "towns");
                 set = statement.executeQuery();
 
                 while (set.next()) {
-                    towns.add(loadFromSQL(set.getInt("Id"), set
+                    Town town = loadFromSQL(set.getInt("Id"), set
                             .getString("Name"), set.getInt("ExtraBlocks"), set
-                            .getString("Blocks"), set.getString("Extra")));
+                            .getString("Blocks"), set.getString("Extra"));
+                    towns.put(town.name().toLowerCase(), town);
                 }
             } catch (Exception e) {
                 printException(e);

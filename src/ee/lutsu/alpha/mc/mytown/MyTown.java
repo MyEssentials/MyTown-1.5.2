@@ -204,6 +204,10 @@ public class MyTown {
         prop = config.get("General", "MinDistanceFromAnotherTown", 50);
         prop.comment = "How many blocks(chunks) apart have the town blocks be";
         Town.minDistanceFromOtherTown = prop.getInt(5);
+        
+        prop = config.get("General", "AllowFarawayClaims", true);
+        prop.comment = "Whether players are allowed to claim chunks not connected to earlier ones";
+        Town.allowFarawayClaims = prop.getBoolean(true);
 
         prop = config.get("General", "AllowTownMemberPvp", false);
         prop.comment = "First check. Can one town member hit a member of the same town? Anywhere. Also called friendlyfire";

@@ -207,7 +207,7 @@ public enum Term {
             "You cannot be part of a town"), TownErrTownNameCannotBeEmpty(
             "Cannot set a empty name"), TownErrTownNameAlreadyInUse(
             "This town name has already need used"), TownErrNoFreeBlocks(
-            "You don't have any free blocks"),
+            "You don't have any free blocks"), TownErrNotAdjacent("Block is not adjacent to an already claimed block of this town"),
 
     ErrUnknowCommand(
             "§4Unknown command. Use tab for autocomplete or /t help to find correct commands. Commands are different based on your town rank."),

@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 
 import com.google.common.collect.Lists;
+import com.sperion.forgeperms.ForgePerms;
 
 import ee.lutsu.alpha.mc.mytown.Assert;
 import ee.lutsu.alpha.mc.mytown.CommandException;
@@ -160,6 +161,10 @@ public class MyTownAssistant {
             int requestedBlocks = 0, ableToClaim = 0, alreadyOwn = 0;
             List<TownBlock> blocks = Lists.newArrayList();
 
+            boolean bypassFarawayRestriction = ForgePerms.getPermissionsHandler().canAccess(res.name(),
+                    res.onlinePlayer.worldObj.provider.getDimensionName(),
+                    "mytown.adm.bypass.faraway");
+            
             for (int z = cz - radius_rec; z <= cz + radius_rec; z++) {
                 for (int x = cx - radius_rec; x <= cx + radius_rec; x++) {
                     requestedBlocks++;
@@ -173,6 +178,9 @@ public class MyTownAssistant {
 
                     try {
                         Town.canAddBlock(b, false, res.town());
+                        if (!bypassFarawayRestriction && !Town.allowFarawayClaims && !res.town().blocks().isEmpty()) {
+                            Town.isBlockAdjacentToTown(b, res.town());
+                        }
                         ableToClaim++;
                         blocks.add(b);
                     } catch (CommandException e) {

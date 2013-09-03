@@ -75,10 +75,9 @@ public class Nation {
             throw new CommandException(Term.TownErrNationNameCannotBeEmpty);
         }
 
-        for (Nation n : MyTownDatasource.instance.nations) {
-            if (n != this && n.name.equalsIgnoreCase(name)) {
-                throw new CommandException(Term.TownErrNationNameInUse);
-            }
+        Nation n = MyTownDatasource.instance.nations.get(name);
+        if (n != this) {
+            throw new CommandException(Term.TownErrNationNameInUse);
         }
     }
 

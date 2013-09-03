@@ -38,7 +38,7 @@ public class MyTownEveryone {
         } else if (args.length == 2
                 && (args[0].equalsIgnoreCase(Term.TownCmdInfo.toString()) || args[0]
                         .equalsIgnoreCase(Term.TownCmdSpawn.toString()))) {
-            for (Town t : MyTownDatasource.instance.towns) {
+            for (Town t : MyTownDatasource.instance.towns.values()) {
                 list.add(t.name());
             }
         } else if (args.length == 2
@@ -283,7 +283,7 @@ public class MyTownEveryone {
             handled = true;
 
             ArrayList<Town> sorted = new ArrayList<Town>(
-                    MyTownDatasource.instance.towns);
+                    MyTownDatasource.instance.towns.values());
 
             Collections.sort(sorted, new Comparator<Town>() {
                 @Override
