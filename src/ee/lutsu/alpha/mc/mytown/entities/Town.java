@@ -320,7 +320,7 @@ public class Town {
         }
 
         int sqr = minDistanceFromOtherTown * minDistanceFromOtherTown;
-        for (TownBlock b : MyTownDatasource.instance.blocks) {
+        for (TownBlock b : MyTownDatasource.instance.blocks.values()) {
             if (b != block
                     && b.town() != null
                     && b.town() != self

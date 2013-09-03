@@ -829,7 +829,7 @@ public class Resident {
             fnames.add(Formatter.formatResidentName(r));
         }
 
-        for (Resident r : MyTownDatasource.instance.residents) {
+        for (Resident r : MyTownDatasource.instance.residents.values()) {
             if (r.friends.contains(this)) {
                 fnames2.add(Formatter.formatResidentName(r));
             }

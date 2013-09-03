@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.base.Joiner;
@@ -529,10 +530,10 @@ public abstract class MyTownDB extends Database {
 
     public abstract Town getTown(int id);
 
-    public List<Resident> loadResidents() {
+    public Map<String, Resident> loadResidents() {
         synchronized (lock) {
             ResultSet set = null;
-            List<Resident> residents = new ArrayList<Resident>();
+            Map<String, Resident> residents = new HashMap<String, Resident>();
             HashMap<Resident, String> friends = new HashMap<Resident, String>();
             try {
                 PreparedStatement statement = prepare("SELECT * FROM " + prefix
@@ -551,7 +552,7 @@ public abstract class MyTownDB extends Database {
                             .getString("LastLogin")), set.getString("Extra"),
                             set.getString("Homes"));
 
-                    residents.add(r);
+                    residents.put(r.name().toLowerCase(), r);
 
                     String f = set.getString("Friends");
                     if (f != null && f.length() > 0) {
@@ -574,7 +575,7 @@ public abstract class MyTownDB extends Database {
                 for (String sfid : ids) {
                     int fid = Integer.parseInt(sfid);
                     Resident friend = null;
-                    for (Resident r2 : residents) {
+                    for (Resident r2 : residents.values()) {
                         if (r2.id() == fid) {
                             friend = r2;
                             break;

@@ -58,7 +58,7 @@ public class MyTownAssistant {
             list.add(Term.TownCmdClaimArgs1.toString());
         } else if (args.length == 2
                 && args[0].equalsIgnoreCase(Term.TownCmdInvite.toString())) {
-            for (Resident r : MyTownDatasource.instance.residents) {
+            for (Resident r : MyTownDatasource.instance.residents.values()) {
                 if (r.town() == null) {
                     list.add(r.name());
                 }

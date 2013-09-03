@@ -2,6 +2,7 @@ package ee.lutsu.alpha.mc.mytown;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -16,15 +17,24 @@ import ee.lutsu.alpha.mc.mytown.sql.MyTownDB;
 public class MyTownDatasource extends MyTownDB {
 	public static MyTownDatasource instance = new MyTownDatasource();
 
-	public HashSet<Resident> residents = new HashSet<Resident>();
+	public HashMap<String, Resident> residents = new HashMap<String, Resident>();
 	public HashSet<Town> towns = new HashSet<Town>();
-	public HashSet<TownBlock> blocks = new HashSet<TownBlock>();
+	public HashMap<String, TownBlock> blocks = new HashMap<String, TownBlock>();
 	public HashSet<Nation> nations = new HashSet<Nation>();
+	
+	public String getTownBlockKey(int dim, int x, int z) {
+		return dim + ";" + x + ";" + z;
+	}
+	
+	public String getTownBlockKey(TownBlock block) {
+		return block.worldDimension() + ";" + block.x() + ";" + block.z();
+	}
+
 
 	public void init() throws Exception {
-		residents = new HashSet<Resident>();
+		residents = new HashMap<String, Resident>();
 		towns = new HashSet<Town>();
-		blocks = new HashSet<TownBlock>();
+		blocks = new HashMap<String, TownBlock>();
 		nations = new HashSet<Nation>();
 
 		dispose();
@@ -32,7 +42,7 @@ public class MyTownDatasource extends MyTownDB {
 		load();
 
 		towns.addAll(loadTowns());
-		residents.addAll(loadResidents()); // links to towns
+		residents.putAll(loadResidents()); // links to towns
 
 		for (Town t : towns) {
 			for (TownBlock res : t.blocks()) {
@@ -43,7 +53,7 @@ public class MyTownDatasource extends MyTownDB {
 					res.owner_name = null;
 				}
 
-				blocks.add(res); // add block to global list
+				blocks.put(getTownBlockKey(res), res); // add block to global list
 			}
 		}
 
@@ -69,33 +79,24 @@ public class MyTownDatasource extends MyTownDB {
 
 	public TownBlock getOrMakeBlock(int world_dimension, int x, int z) {
 		long start = System.nanoTime();
-		for (TownBlock res : blocks) {
-			if (res.equals(world_dimension, x, z)) {
-				long stop = System.nanoTime();
-				Log.info("getOrMakeBlock took: %l", stop - start);
-				return res;
-			}
+		TownBlock res = blocks.get(getTownBlockKey(world_dimension, x, z));
+		if (res == null) {
+			res = new TownBlock(world_dimension, x, z);
+			blocks.put(getTownBlockKey(world_dimension, x, z), res);
 		}
 
-		TownBlock res = new TownBlock(world_dimension, x, z);
-		blocks.add(res);
 		long stop = System.nanoTime();
-		Log.info("getOrMakeBlock took: %l", stop - start);
+		Log.info("getOrMakeBlock took: %d", stop - start);
 		return res;
 	}
 
 	public TownBlock getBlock(int world_dimension, int x, int z) {
 		long start = System.nanoTime();
-		for (TownBlock res : blocks) {
-			if (res.equals(world_dimension, x, z)) {
-				long stop = System.nanoTime();
-				Log.info("getBlock took: %l", stop - start);
-				return res;
-			}
-		}
+		TownBlock res = blocks.get(getTownBlockKey(world_dimension, x, z));
+
 		long stop = System.nanoTime();
-		Log.info("getBlock took: %l", stop - start);
-		return null;
+		Log.info("getBlock took: %d", stop - start);
+		return res;
 	}
 
 	public TownBlock getPermBlockAtCoord(int world_dimension, int x, int y, int z) {
@@ -118,13 +119,13 @@ public class MyTownDatasource extends MyTownDB {
 		for (Town res : towns) {
 			if (res.name().equalsIgnoreCase(name)) {
 				long stop = System.nanoTime();
-				Log.info("getTown took: %l", stop - start);
+				Log.info("getTown took: %d", stop - start);
 				return res;
 			}
 		}
 		
 		long stop = System.nanoTime();
-		Log.info("getTown took: %l", stop - start);
+		Log.info("getTown took: %d", stop - start);
 
 		return null;
 	}
@@ -135,12 +136,12 @@ public class MyTownDatasource extends MyTownDB {
 		for (Town res : towns) {
 			if (res.id() == id) {
 				long stop = System.nanoTime();
-				Log.info("getTown took: %l", stop - start);
+				Log.info("getTown took: %d", stop - start);
 				return res;
 			}
 		}
 		long stop = System.nanoTime();
-		Log.info("getTown took: %l", stop - start);
+		Log.info("getTown took: %d", stop - start);
 
 		return null;
 	}
@@ -157,73 +158,62 @@ public class MyTownDatasource extends MyTownDB {
 
 	public synchronized Resident getOrMakeResident(EntityPlayer player) {
 		long start = System.nanoTime();
-		for (Resident res : residents) {
-			if (res.onlinePlayer == player) {
-				long stop = System.nanoTime();
-				Log.info("getOrMakeResident took: %l", stop - start);
-				return res;
-			}
-		}
+		Resident res = residents.get(player.getEntityName().toLowerCase());
 
-		Resident r = getOrMakeResident(player.getEntityName());
-		r.onlinePlayer = player;
+		if (res == null) {
+			res = makeResident(player.getEntityName());
+		}
+		res.onlinePlayer = player;
 		long stop = System.nanoTime();
-		Log.info("getOrMakeResident took: %l", stop - start);
-		return r;
+		Log.info("getOrMakeResident took: %d", stop - start);
+		return res;
 	}
 
 	public Resident getResident(EntityPlayer player) {
 		long start = System.nanoTime();
-		for (Resident res : residents) {
-			if (res.onlinePlayer == player) {
-				long stop = System.nanoTime();
-				Log.info("getResident took: %l", stop - start);
-				return res;
-			}
-		}
+		
+		Resident res = residents.get(player.getEntityName().toLowerCase());
+		
 		long stop = System.nanoTime();
-		Log.info("getResident took: %l", stop - start);
+		Log.info("getResident took: %d", stop - start);
 
-		return null;
+		return res;
 	}
 
-	public Resident getOrMakeResident(String name) // case sensitive
+	public Resident getOrMakeResident(String name) // case in-sensitive
 	{
 		long start = System.nanoTime();
-		for (Resident res : residents) {
-			if (res.name().equals(name)) {
-				long stop = System.nanoTime();
-				Log.info("getOrMakeResident took: %l", stop - start);
-				return res;
-			}
-		}
+		Resident res = residents.get(name.toLowerCase());
 
-		Resident res = new Resident(name);
-		residents.add(res);
+		if (res == null) {
+			res = makeResident(name);
+		}
+		
 		long stop = System.nanoTime();
-		Log.info("getOrMakeResident took: %l", stop - start);
+		Log.info("getOrMakeResident took: %d", stop - start);
+		return res;
+	}
+	
+	private Resident makeResident(String name) {
+		Resident res = new Resident(name);
+		residents.put(name.toLowerCase(), res);
+		
 		return res;
 	}
 
 	public Resident getResident(String name) // case in-sensitive
 	{
 		long start = System.nanoTime();
-		for (Resident res : residents) {
-			if (res.name().equalsIgnoreCase(name)) {
-				long stop = System.nanoTime();
-				Log.info("getResident took: %l", stop - start);
-				return res;
-			}
-		}
+		Resident res = residents.get(name.toLowerCase());
 		long stop = System.nanoTime();
-		Log.info("getResident took: %l", stop - start);
+		Log.info("getResident took: %d", stop - start);
 
-		return null;
+		return res;
 	}
 
 	public List<Resident> getOnlineResidents() {
 		ArrayList<Resident> ret = new ArrayList<Resident>();
-		for (Resident res : residents) {
+		for (Resident res : residents.values()) {
 			if (res.isOnline()) {
 				ret.add(res);
 			}
@@ -242,7 +232,7 @@ public class MyTownDatasource extends MyTownDB {
 
 	public void unloadBlock(TownBlock b) {
 		b.settings.setParent(null);
-		blocks.remove(b);
+		blocks.remove(getTownBlockKey(b));
 	}
 
 	public void unloadResident(Resident r) {
@@ -254,7 +244,7 @@ public class MyTownDatasource extends MyTownDB {
 	public int deleteAllTownBlocksInDimension(int dim) {
 		int ret = 0;
 		ArrayList<TownBlock> toRemove = new ArrayList<TownBlock>();
-		for (TownBlock res : blocks) {
+		for (TownBlock res : blocks.values()) {
 			if (res.worldDimension() == dim) {
 				toRemove.add(res);
 			}
@@ -281,7 +271,7 @@ public class MyTownDatasource extends MyTownDB {
 	public List<Resident> getOldResidents(Date lastLoginTimeBelow) {
 		ArrayList<Resident> players = new ArrayList<Resident>();
 		synchronized (residents) {
-			for (Resident res : residents) {
+			for (Resident res : residents.values()) {
 				if (res.town() != null && !res.isOnline() && res.lastLogin().compareTo(lastLoginTimeBelow) < 0) {
 					players.add(res);
 				}
@@ -294,7 +284,7 @@ public class MyTownDatasource extends MyTownDB {
 	public List<Town> getOldTowns(long lastLoginTimeBelow, double plotDaysAddition) {
 		ArrayList<Town> towns = new ArrayList<Town>();
 		synchronized (residents) {
-			for (Resident res : residents) {
+			for (Resident res : residents.values()) {
 				Date last = new Date(lastLoginTimeBelow - (res.town() != null ? (int) (plotDaysAddition * res.town().blocks().size()) : 0));
 				if (res.town() != null && !res.isOnline() && res.lastLogin().compareTo(last) < 0) {
 					if (!towns.contains(res.town())) {

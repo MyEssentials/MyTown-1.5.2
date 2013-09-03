@@ -43,7 +43,7 @@ public class MyTownEveryone {
             }
         } else if (args.length == 2
                 && args[0].equalsIgnoreCase(Term.TownCmdRes.toString())) {
-            for (Resident r : MyTownDatasource.instance.residents) {
+            for (Resident r : MyTownDatasource.instance.residents.values()) {
                 list.add(r.name());
             }
         } else if (args.length == 2
@@ -60,7 +60,7 @@ public class MyTownEveryone {
                     .getOrMakeResident((EntityPlayer) cs);
             String cmd = args[1];
 
-            for (Resident r : MyTownDatasource.instance.residents) {
+            for (Resident r : MyTownDatasource.instance.residents.values()) {
                 if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsAdd.toString())
                         && res.friends.contains(r)) {
                     continue;
