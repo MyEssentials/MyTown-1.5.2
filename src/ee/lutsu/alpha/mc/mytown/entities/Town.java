@@ -2,6 +2,7 @@ package ee.lutsu.alpha.mc.mytown.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import net.minecraft.command.ICommandSender;
@@ -323,20 +324,38 @@ public class Town {
         }
     }
 
-    public static void isBlockAdjacentToTown(TownBlock block, Town town) throws CommandException {
+    public static boolean isBlockAdjacentToTown(TownBlock block, Town town)  {
         
         TownBlock adjacent;
         
         adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x()-1, block.z());
-        if (adjacent != null && adjacent.town() == town) return;
+        if (adjacent != null && adjacent.town() == town) return true;
         adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x()+1, block.z());
-        if (adjacent != null && adjacent.town() == town) return;
+        if (adjacent != null && adjacent.town() == town) return true;
         adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x(), block.z()-1);
-        if (adjacent != null && adjacent.town() == town) return;
+        if (adjacent != null && adjacent.town() == town) return true;
         adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x(), block.z()+1);
-        if (adjacent != null && adjacent.town() == town) return;
+        if (adjacent != null && adjacent.town() == town) return true;
         
-        throw new CommandException(Term.TownErrBlockTooCloseToAnotherTown);
+        return false;
+       
+    }
+    
+    public static boolean isBlockAdjacentToBlocks(TownBlock block, Map<String, TownBlock> blocks)  {
+        
+        TownBlock adjacent;
+        
+        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x()-1, block.z()));
+        if (adjacent != null) return true;
+        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x()+1, block.z()));
+        if (adjacent != null) return true;
+        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x(), block.z()-1));
+        if (adjacent != null) return true;
+        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x(), block.z()+1));
+        if (adjacent != null) return true;
+        
+        return false;
+       
     }
 
     public void addBlock(TownBlock block) throws CommandException {

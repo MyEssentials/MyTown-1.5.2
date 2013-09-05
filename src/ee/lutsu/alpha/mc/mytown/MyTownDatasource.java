@@ -22,11 +22,11 @@ public class MyTownDatasource extends MyTownDB {
 	public HashMap<String, TownBlock> blocks = new HashMap<String, TownBlock>();
 	public HashMap<String, Nation> nations = new HashMap<String, Nation>();
 	
-	public String getTownBlockKey(int dim, int x, int z) {
+	public static String getTownBlockKey(int dim, int x, int z) {
 		return dim + ";" + x + ";" + z;
 	}
 	
-	public String getTownBlockKey(TownBlock block) {
+	public static String getTownBlockKey(TownBlock block) {
 		return block.worldDimension() + ";" + block.x() + ";" + block.z();
 	}
 
@@ -158,11 +158,7 @@ public class MyTownDatasource extends MyTownDB {
 
 	public Resident getResident(String name) // case in-sensitive
 	{
-		long start = System.nanoTime();
 		Resident res = residents.get(name.toLowerCase());
-		long stop = System.nanoTime();
-		Log.info("getResident took: %d", stop - start);
-
 		return res;
 	}
 
