@@ -299,8 +299,8 @@ public class Town {
             throw new CommandException(Term.TownErrTownNameCannotBeEmpty);
         }
 
-        Town t = MyTownDatasource.instance.towns.get(name);
-        if (t != self) {
+        Town t = MyTownDatasource.instance.towns.get(name.toLowerCase());
+        if (t != null && t != self) {
             throw new CommandException(Term.TownErrTownNameAlreadyInUse);
         }
     }
