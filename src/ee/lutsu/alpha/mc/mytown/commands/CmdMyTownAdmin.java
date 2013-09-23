@@ -125,7 +125,7 @@ public class CmdMyTownAdmin extends CommandBase {
                 }
 
                 int i = 0;
-                for (Resident r : MyTownDatasource.instance.residents) {
+                for (Resident r : MyTownDatasource.instance.residents.values()) {
                     if (r.activeChannel != ChatChannel.defaultChannel) {
                         i++;
                         r.setActiveChannel(ChatChannel.defaultChannel);
