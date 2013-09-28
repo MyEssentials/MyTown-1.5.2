@@ -39,7 +39,7 @@ public class MyTownNation {
             } else if (args.length == 3
                     && args[1].equalsIgnoreCase(Term.TownCmdNationInfo
                             .toString())) {
-                for (Nation n : MyTownDatasource.instance.nations) {
+                for (Nation n : MyTownDatasource.instance.nations.values()) {
                     list.add(n.name());
                 }
             }
@@ -81,7 +81,7 @@ public class MyTownNation {
                                 && args[1]
                                         .equalsIgnoreCase(Term.TownCmdNationInvite
                                                 .toString())) {
-                            for (Town n : MyTownDatasource.instance.towns) {
+                            for (Town n : MyTownDatasource.instance.towns.values()) {
                                 if (n.nation() == null) {
                                     list.add(n.name());
                                 }
@@ -191,7 +191,7 @@ public class MyTownNation {
             handled = true;
 
             ArrayList<Nation> sorted = new ArrayList<Nation>(
-                    MyTownDatasource.instance.nations);
+                    MyTownDatasource.instance.nations.values());
 
             Collections.sort(sorted, new Comparator<Nation>() {
                 @Override
