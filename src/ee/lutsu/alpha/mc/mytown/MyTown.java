@@ -61,7 +61,7 @@ import ee.lutsu.alpha.mc.mytown.event.WorldEvents;
 import ee.lutsu.alpha.mc.mytown.event.tick.WorldBorder;
 import ee.lutsu.alpha.mc.mytown.sql.Database;
 
-@Mod(modid = "MyTown", name = "My Town", version = "1.5.0.0")
+@Mod(modid = "MyTown", name = "My Town", version = "1.5.1.10")
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
 public class MyTown {
     public static String MOD_NAME = "MyTown";
