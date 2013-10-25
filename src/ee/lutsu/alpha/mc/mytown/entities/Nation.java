@@ -139,20 +139,17 @@ public class Nation {
             return 0;
         }
 
-        return nationAddsBlocksPerResident * forTown.residents().size()
-                + extraBlocks + nationAddsBlocks;
+        return nationAddsBlocksPerResident * forTown.residents().size() + extraBlocks + nationAddsBlocks;
     }
 
-    public static Nation sqlLoad(int id, String name, int capital,
-            String pTowns, String extra) {
+    public static Nation sqlLoad(int id, String name, int capital, String pTowns, String extra) {
         Nation n = new Nation();
         n.id = id;
         n.name = name;
 
         if (pTowns != null && pTowns.trim().length() > 0) {
             for (String town : pTowns.trim().split(";")) {
-                Town t = MyTownDatasource.instance.getTown(Integer
-                        .parseInt(town));
+                Town t = MyTownDatasource.instance.getTown(Integer.parseInt(town));
 
                 if (t != null) {
                     t.setNation(n);
@@ -222,19 +219,16 @@ public class Nation {
 
         String nationColor = "§2";
         if (pl instanceof EntityPlayer) {
-            Resident target = MyTownDatasource.instance
-                    .getOrMakeResident((EntityPlayer) pl);
+            Resident target = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) pl);
             if (target.town() == null || target.town().nation() != n) {
                 nationColor = "§4";
             }
         }
 
-        pl.sendChatToPlayer(Term.NationStatusName.toString(nationColor, n
-                .name()));
+        pl.sendChatToPlayer(Term.NationStatusName.toString(nationColor, n.name()));
 
         pl.sendChatToPlayer(Term.NationStatusGeneral.toString(b1, b2, m1));
-        pl.sendChatToPlayer(Term.NationStatusCapital
-                .toString(n.capital() != null ? n.capital().name() : "?"));
+        pl.sendChatToPlayer(Term.NationStatusCapital.toString(n.capital() != null ? n.capital().name() : "?"));
         pl.sendChatToPlayer(Term.NationStatusTowns.toString(tNames));
     }
 }

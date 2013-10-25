@@ -77,7 +77,7 @@ public class MyTown {
     public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
 
     @Mod.Instance("MyTown")
-    public static MyTown instance; 
+    public static MyTown instance;
     public Configuration config = new Configuration(new File(CONFIG_FILE));
 
     public List<CommandBase> commands = new ArrayList<CommandBase>();
@@ -131,8 +131,7 @@ public class MyTown {
             loadCommandsConfig(config);
             WorldBorder.instance.continueGeneratingChunks();
         } catch (Exception var8) {
-            FMLLog.log(Level.SEVERE, var8, MOD_NAME + " was unable to load it\'s configuration successfully",
-                    new Object[0]);
+            FMLLog.log(Level.SEVERE, var8, MOD_NAME + " was unable to load it\'s configuration successfully", new Object[0]);
             throw new RuntimeException(var8);
         } finally {
             config.save(); // re-save to add the missing configuration variables
@@ -204,7 +203,7 @@ public class MyTown {
         prop = config.get("General", "MinDistanceFromAnotherTown", 50);
         prop.comment = "How many blocks(chunks) apart have the town blocks be";
         Town.minDistanceFromOtherTown = prop.getInt(5);
-        
+
         prop = config.get("General", "AllowFarawayClaims", true);
         prop.comment = "Whether players are allowed to claim chunks not connected to earlier ones";
         Town.allowFarawayClaims = prop.getBoolean(true);
@@ -225,29 +224,20 @@ public class MyTown {
         prop.comment = "Defines the cart id's which can be placed on a rail with carts perm on. Includes all cart-types.";
         carts = ItemIdRange.parseList(Arrays.asList(prop.getString().split(";")));
 
-        Town.pvpSafeTowns = config
-                .get("General", "PVPSafeTown", "Spawn,Server",
-                        "Towns that PVP is disabled in, reguardless of the AllowPvpInTown setting.").getString()
-                .split(",");
+        Town.pvpSafeTowns = config.get("General", "PVPSafeTown", "Spawn,Server", "Towns that PVP is disabled in, reguardless of the AllowPvpInTown setting.").getString().split(",");
 
-        prop = config.get("General", "LeftClickAccessBlocks", "1000:2",
-                "Which blocks should be considered as access when someone is hitting them. Like TE Barrels");
+        prop = config.get("General", "LeftClickAccessBlocks", "1000:2", "Which blocks should be considered as access when someone is hitting them. Like TE Barrels");
         leftClickAccessBlocks = ItemIdRange.parseList(Arrays.asList(prop.getString().split(";")));
 
-        Resident.teleportToSpawnWaitSeconds = config.get("General", "SpawnTeleportTimeout",
-                Resident.teleportToSpawnWaitSeconds, "How many seconds the /spawn teleport takes").getInt();
-        Resident.teleportToHomeWaitSeconds = config.get("General", "HomeTeleportTimeout",
-                Resident.teleportToHomeWaitSeconds, "How many seconds the /home teleport takes").getInt();
+        Resident.teleportToSpawnWaitSeconds = config.get("General", "SpawnTeleportTimeout", Resident.teleportToSpawnWaitSeconds, "How many seconds the /spawn teleport takes").getInt();
+        Resident.teleportToHomeWaitSeconds = config.get("General", "HomeTeleportTimeout", Resident.teleportToHomeWaitSeconds, "How many seconds the /home teleport takes").getInt();
 
-        SavedHomeList.defaultIsBed = config.get("General", "DefaultHomeIsBed", SavedHomeList.defaultIsBed,
-                "Are the /sethome and /home commands with no home name linked to the bed location?").getBoolean(
-                SavedHomeList.defaultIsBed);
+        SavedHomeList.defaultIsBed = config.get("General", "DefaultHomeIsBed", SavedHomeList.defaultIsBed, "Are the /sethome and /home commands with no home name linked to the bed location?").getBoolean(SavedHomeList.defaultIsBed);
     }
 
     private void loadCostConfigs(Configuration config) {
         config.addCustomCategoryComment("cost", "MyTown item based economy");
-        config.addCustomCategoryComment("cost.list",
-                "Defines what and how much costs. Set the amount to 0 to disable the cost. Syntax: [amount]x[item id]:[sub id]");
+        config.addCustomCategoryComment("cost.list", "Defines what and how much costs. Set the amount to 0 to disable the cost. Syntax: [amount]x[item id]:[sub id]");
         for (Cost c : Cost.values()) {
             c.item = getItemStackConfig(config, "cost.list", c.name(), c.item, c.description);
         }
@@ -256,16 +246,10 @@ public class MyTown {
             Cost.disable();
         }
 
-        Cost.homeSetNewAdditional = config
-                .get("cost",
-                        "HomeCostAdditionPerHome",
-                        Cost.homeSetNewAdditional,
-                        "How much of the /sethome cost item is requested more for every home the player has when the player is creating a new home location. Ex. with 2 homes = /sethome cost + this * 2")
-                .getInt();
+        Cost.homeSetNewAdditional = config.get("cost", "HomeCostAdditionPerHome", Cost.homeSetNewAdditional, "How much of the /sethome cost item is requested more for every home the player has when the player is creating a new home location. Ex. with 2 homes = /sethome cost + this * 2").getInt();
     }
 
-    private static ItemStack getItemStackConfig(Configuration config, String cat, String node, ItemStack def,
-            String comment) {
+    private static ItemStack getItemStackConfig(Configuration config, String cat, String node, ItemStack def, String comment) {
         String sDef = "";
         if (def != null) {
             sDef = def.stackSize + "x" + def.itemID + (def.getItemDamage() != 0 ? ":" + def.getItemDamage() : "");
@@ -326,7 +310,7 @@ public class MyTown {
         prop.comment = "Setting this stops player messages from using the MyTown channel functionality.\n";
         prop.comment += "Explicit call of channel commands (/g, /h, etc.) still works unless disabled separatedly";
         PlayerEvents.disableAutoChatChannelUsage = prop.getBoolean(false);
-        
+
         prop = config.get("Chat", "TextColoringPrefix", "$");
         prop.comment = "This is the prefix used for color codes in chat. Default value $\n";
         prop.comment += "When using with Bukkit plugins, it's recommended to change this to &";
@@ -367,28 +351,23 @@ public class MyTown {
 
         for (ChatChannel ch : ChatChannel.values()) {
             prop = config.get("Chat", "Channel_" + ch.toString(), "");
-            prop.comment = "<enabled>;<name>;<abbrevation>;<color>;<inlineswitch> like "
-                    + String.format("%s;%s;%s;%s", ch.enabled ? 1 : 0, ch.name, ch.abbrevation, ch.color);
+            prop.comment = "<enabled>;<name>;<abbrevation>;<color>;<inlineswitch> like " + String.format("%s;%s;%s;%s", ch.enabled ? 1 : 0, ch.name, ch.abbrevation, ch.color);
             ch.load(prop.getString());
         }
     }
 
     private void loadExtraProtectionConfig(Configuration config) {
-        ProtectionEvents.instance.enabled = config.get("ProtEx", "Enabled", true, "Run the extra protections")
-                .getBoolean(true);
-        ProtectionEvents.instance.dynamicEnabling = config.get("ProtEx", "DynamicEnabling", true,
-                "Load all modules for which mods are present").getBoolean(true);
+        ProtectionEvents.instance.enabled = config.get("ProtEx", "Enabled", true, "Run the extra protections").getBoolean(true);
+        ProtectionEvents.instance.dynamicEnabling = config.get("ProtEx", "DynamicEnabling", true, "Load all modules for which mods are present").getBoolean(true);
 
         if (ProtectionEvents.instance.dynamicEnabling) {
             config.getCategory("ProtEx").clear();
 
             config.get("ProtEx", "Enabled", true, "Run the extra protections?").set(ProtectionEvents.instance.enabled);
-            config.get("ProtEx", "DynamicEnabling", true, "Load all modules for which mods are present").set(
-                    ProtectionEvents.instance.dynamicEnabling);
+            config.get("ProtEx", "DynamicEnabling", true, "Load all modules for which mods are present").set(ProtectionEvents.instance.dynamicEnabling);
         } else {
             for (ProtBase prot : ProtectionEvents.getProtections()) {
-                prot.enabled = config.get("ProtEx", prot.getMod(), prot.defaultEnabled(), prot.getComment())
-                        .getBoolean(false);
+                prot.enabled = config.get("ProtEx", prot.getMod(), prot.defaultEnabled(), prot.getComment()).getBoolean(false);
             }
         }
     }
@@ -399,8 +378,7 @@ public class MyTown {
 
         for (CommandBase cmd : commands) {
             prop = config.get("Commands", "Enable_" + cmd.getCommandName(), true);
-            prop.comment = String.format("Should the %s [/%s] command be used?", cmd.getClass().getSimpleName(),
-                    cmd.getCommandName());
+            prop.comment = String.format("Should the %s [/%s] command be used?", cmd.getClass().getSimpleName(), cmd.getCommandName());
 
             if (prop.getBoolean(true)) {
                 mgr.registerCommand(cmd);
@@ -469,5 +447,4 @@ public class MyTown {
 
         return set;
     }
-
 }

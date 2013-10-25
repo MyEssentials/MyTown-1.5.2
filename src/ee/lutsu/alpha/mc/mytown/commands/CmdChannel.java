@@ -42,14 +42,12 @@ public class CmdChannel extends CommandBase {
             return;
         }
 
-        Resident res = MyTownDatasource.instance
-                .getOrMakeResident((EntityPlayer) var1);
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) var1);
         if (var2.length != 1) {
             var1.sendChatToPlayer(Term.ChatListStart.toString());
             for (ChatChannel c : ChatChannel.values()) {
                 if (c.enabled) {
-                    var1.sendChatToPlayer(Term.ChatListEntry.toString(c.color,
-                            c.name, c.color, c.abbrevation));
+                    var1.sendChatToPlayer(Term.ChatListEntry.toString(c.color, c.name, c.color, c.abbrevation));
                 }
             }
         } else {
@@ -58,7 +56,7 @@ public class CmdChannel extends CommandBase {
                 ch = ChatChannel.defaultChannel;
             }
 
-            if (!ForgePerms.getPermissionsHandler().canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.focus." + ch.name.toLowerCase())) {
+            if (!ForgePerms.getPermissionManager().canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.focus." + ch.name.toLowerCase())) {
                 var1.sendChatToPlayer("§4You cannot focus to " + ch.name + " channel");
                 return;
             }
@@ -67,11 +65,9 @@ public class CmdChannel extends CommandBase {
 
             if (ch != res.activeChannel) {
                 res.setActiveChannel(ch);
-                var1.sendChatToPlayer(Term.ChatSwitch.toString(ch.color,
-                        ch.abbrevation, ch.color, ch.name));
+                var1.sendChatToPlayer(Term.ChatSwitch.toString(ch.color, ch.abbrevation, ch.color, ch.name));
             } else {
-                var1.sendChatToPlayer(Term.ChatSwitchAlreadyIn.toString(
-                        ch.color, ch.abbrevation, ch.color, ch.name));
+                var1.sendChatToPlayer(Term.ChatSwitchAlreadyIn.toString(ch.color, ch.abbrevation, ch.color, ch.name));
             }
         }
     }

@@ -30,20 +30,14 @@ public class CmdHomes extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler()
-                    .canAccess(p.username,
-                            p.worldObj.provider.getDimensionName(),
-                            "mytown.ecmd.homes");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.homes");
         }
         return false;
-        // return cs instanceof EntityPlayerMP &&
-        // MyTown.instance.perms.canAccess(cs, "mytown.ecmd.homes");
     }
 
     @Override
     public String getCommandUsage(ICommandSender cs) {
-        return getCommandName()
-                + " [loc] - Shows the player homes [with location]";
+        return getCommandName() + " [loc] - Shows the player homes [with location]";
     }
 
     @Override
@@ -57,39 +51,30 @@ public class CmdHomes extends CommandBase {
             } else {
                 if (args.length == 1 && args[0].equalsIgnoreCase("loc")) {
                     cs.sendChatToPlayer(Term.HomeCmdHomesTitle.toString(""));
-                    if (SavedHomeList.defaultIsBed
-                            && pl.getBedLocation() != null) {
+                    if (SavedHomeList.defaultIsBed && pl.getBedLocation() != null) {
                         SavedHome s = SavedHome.fromBed(pl);
-                        cs.sendChatToPlayer(Term.HomeCmdHomesUnaccessibleItem2
-                                .toString("default", s.dim, (int) s.x,
-                                        (int) s.y, (int) s.z));
+                        cs.sendChatToPlayer(Term.HomeCmdHomesUnaccessibleItem2.toString("default", s.dim, (int) s.x, (int) s.y, (int) s.z));
                     }
 
                     for (SavedHome h : res.home) {
-                        cs.sendChatToPlayer(Term.HomeCmdHomesItem2.toString(
-                                h.name, h.dim, (int) h.x, (int) h.y, (int) h.z));
+                        cs.sendChatToPlayer(Term.HomeCmdHomesItem2.toString(h.name, h.dim, (int) h.x, (int) h.y, (int) h.z));
                     }
                 } else {
                     List<String> items = Lists.newArrayList();
-                    if (SavedHomeList.defaultIsBed
-                            && pl.getBedLocation() != null) {
-                        items.add(Term.HomeCmdHomesUnaccessibleItem
-                                .toString("default"));
+                    if (SavedHomeList.defaultIsBed && pl.getBedLocation() != null) {
+                        items.add(Term.HomeCmdHomesUnaccessibleItem.toString("default"));
                     }
 
                     for (SavedHome h : res.home) {
                         items.add(Term.HomeCmdHomesItem.toString(h.name));
                     }
 
-                    cs.sendChatToPlayer(Term.HomeCmdHomesTitle.toString(Joiner
-                            .on(", ").join(items)));
+                    cs.sendChatToPlayer(Term.HomeCmdHomesTitle.toString(Joiner.on(", ").join(items)));
                 }
             }
         } catch (Throwable ex) {
-            Log.log(Level.WARNING, String.format(
-                    "Command execution error by %s", cs), ex);
-            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex
-                    .toString()));
+            Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
+            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex.toString()));
         }
     }
 }

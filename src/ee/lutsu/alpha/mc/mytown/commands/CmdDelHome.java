@@ -26,9 +26,7 @@ public class CmdDelHome extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(),
-                    "mytown.ecmd.delhome");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.delhome");
         }
         return false;
     }
@@ -44,16 +42,12 @@ public class CmdDelHome extends CommandBase {
             }
 
             res.home.delete(args.length == 0 ? null : args[0]);
-            cs.sendChatToPlayer(args.length == 0 ? Term.HomeCmdHomeDeleted
-                    .toString() : Term.HomeCmdHome2Deleted.toString(args[0]));
+            cs.sendChatToPlayer(args.length == 0 ? Term.HomeCmdHomeDeleted.toString() : Term.HomeCmdHome2Deleted.toString(args[0]));
         } catch (CommandException ex) {
-            cs.sendChatToPlayer(Formatter.commandError(Level.WARNING,
-                    ex.errorCode.toString(ex.args)));
+            cs.sendChatToPlayer(Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
         } catch (Throwable ex) {
-            Log.log(Level.WARNING, String.format(
-                    "Command execution error by %s", cs), ex);
-            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex
-                    .toString()));
+            Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
+            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex.toString()));
         }
     }
 }

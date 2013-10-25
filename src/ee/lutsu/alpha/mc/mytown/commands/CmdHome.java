@@ -28,12 +28,9 @@ public class CmdHome extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.ecmd.home");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.home");
         }
         return false;
-        // return cs instanceof EntityPlayerMP &&
-        // MyTown.instance.perms.canAccess(cs, "mytown.ecmd.home");
     }
 
     @Override
@@ -52,28 +49,23 @@ public class CmdHome extends CommandBase {
                 throw new CommandException(Term.HomeCmdNoHomeByName);
             }
 
-            res.pay.requestPayment("hometeleport", Cost.HomeTeleport.item,
-                    new PayHandler.IDone() {
-                        @Override
-                        public void run(Resident player, Object[] args) {
-                            teleport(player, (SavedHome) args[0]);
-                        }
-                    }, h);
+            res.pay.requestPayment("hometeleport", Cost.HomeTeleport.item, new PayHandler.IDone() {
+                @Override
+                public void run(Resident player, Object[] args) {
+                    teleport(player, (SavedHome) args[0]);
+                }
+            }, h);
 
         } catch (CommandException ex) {
-            cs.sendChatToPlayer(Formatter.commandError(Level.WARNING,
-                    ex.errorCode.toString(ex.args)));
+            cs.sendChatToPlayer(Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
         } catch (Throwable ex) {
-            Log.log(Level.WARNING, String.format(
-                    "Command execution error by %s", cs), ex);
-            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex
-                    .toString()));
+            Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
+            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex.toString()));
         }
     }
 
     public static void teleport(Resident res, SavedHome h) {
-        if (Cost.HomeTeleport.item != null
-                && Resident.teleportToHomeWaitSeconds > 0) {
+        if (Cost.HomeTeleport.item != null && Resident.teleportToHomeWaitSeconds > 0) {
             res.onlinePlayer.sendChatToPlayer(Term.HomeCmdDontMove.toString());
         }
 

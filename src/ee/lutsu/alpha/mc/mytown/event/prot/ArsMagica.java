@@ -21,9 +21,8 @@ import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
 public class ArsMagica extends ProtBase {
     public static ArsMagica instance = new ArsMagica();
 
-    private Class<?> clSpellScrollBase = null, clIDamagingSpell,
-            clEntitySpellProjectile, clISummonCreature, clEntityLightMage,
-            clEntityDarkMage; // clIRangedSpell, clIBeamSpell;
+    private Class<?> clSpellScrollBase = null, clIDamagingSpell, clEntitySpellProjectile, clISummonCreature, clEntityLightMage, clEntityDarkMage; // clIRangedSpell,
+                                                                                                                                                  // clIBeamSpell;
     public int explosionRadius = 6;
 
     /**
@@ -34,8 +33,10 @@ public class ArsMagica extends ProtBase {
     public void load() throws Exception {
         clSpellScrollBase = Class.forName("mithion.arsmagica.api.spells.SpellScrollBase");
         clIDamagingSpell = Class.forName("mithion.arsmagica.api.spells.interfaces.IDamagingSpell");
-        // clIRangedSpell = Class.forName("mithion.arsmagica.api.spells.interfaces.IRangedSpell");
-        // clIBeamSpell = Class.forName("mithion.arsmagica.api.spells.interfaces.IBeamSpell");
+        // clIRangedSpell =
+        // Class.forName("mithion.arsmagica.api.spells.interfaces.IRangedSpell");
+        // clIBeamSpell =
+        // Class.forName("mithion.arsmagica.api.spells.interfaces.IBeamSpell");
         clEntitySpellProjectile = Class.forName("mithion.arsmagica.entities.EntitySpellProjectile");
         clISummonCreature = Class.forName("mithion.arsmagica.api.spells.interfaces.ISummonCreature");
         clEntityLightMage = Class.forName("mithion.arsmagica.entities.EntityLightMage");
@@ -74,7 +75,8 @@ public class ArsMagica extends ProtBase {
             int z = (int) (o.posZ + o.motionZ);
             int dim = thrower.onlinePlayer.dimension;
 
-            if (!thrower.canInteract(dim, x - explosionRadius, y, z - explosionRadius, Permissions.Build) || !thrower.canInteract(dim, x - explosionRadius, y, z + explosionRadius, Permissions.Build) || !thrower.canInteract(dim, x + explosionRadius, y, z - explosionRadius, Permissions.Build) || !thrower.canInteract(dim, x + explosionRadius, y, z + explosionRadius, Permissions.Build)) {
+            if (!thrower.canInteract(dim, x - explosionRadius, y, z - explosionRadius, Permissions.Build) || !thrower.canInteract(dim, x - explosionRadius, y, z + explosionRadius, Permissions.Build) || !thrower.canInteract(dim, x + explosionRadius, y, z - explosionRadius, Permissions.Build)
+                    || !thrower.canInteract(dim, x + explosionRadius, y, z + explosionRadius, Permissions.Build)) {
                 return "Explosion would hit a protected town";
             }
         }

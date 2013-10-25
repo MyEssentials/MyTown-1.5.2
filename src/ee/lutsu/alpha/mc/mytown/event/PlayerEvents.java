@@ -81,13 +81,9 @@ public class PlayerEvents implements IPlayerTracker {
         {
             if (ev.entityPlayer.getHeldItem() != null && ev.entityPlayer.getHeldItem().getItem() != null) {
                 Item item = ev.entityPlayer.getHeldItem().getItem();
-                MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(r.onlinePlayer.worldObj,
-                        r.onlinePlayer, false);
+                MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(r.onlinePlayer.worldObj, r.onlinePlayer, false);
                 if (pos == null) {
-                    if (item instanceof ItemBow || item instanceof ItemEgg || item instanceof ItemPotion
-                            || item instanceof ItemFishingRod || item instanceof ItemExpBottle
-                            || item instanceof ItemEnderEye
-                            || item.getClass().getSimpleName().equalsIgnoreCase("ItemNanoBow")) {
+                    if (item instanceof ItemBow || item instanceof ItemEgg || item instanceof ItemPotion || item instanceof ItemFishingRod || item instanceof ItemExpBottle || item instanceof ItemEnderEye || item.getClass().getSimpleName().equalsIgnoreCase("ItemNanoBow")) {
                         perm = Permissions.Build;
                     } else {
                         return;
@@ -115,16 +111,10 @@ public class PlayerEvents implements IPlayerTracker {
 
         TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(ev.entityPlayer.dimension, x, y, z);
 
-        if (action == Action.RIGHT_CLICK_BLOCK
-                && ev.entityPlayer.getHeldItem() != null
-                && ev.entityPlayer.getHeldItem().getItem() != null
-                && (ev.entityPlayer.getHeldItem().getItem() instanceof ItemMinecart || ItemIdRange.contains(
-                        MyTown.instance.carts, ev.entityPlayer.getHeldItem()))) {
+        if (action == Action.RIGHT_CLICK_BLOCK && ev.entityPlayer.getHeldItem() != null && ev.entityPlayer.getHeldItem().getItem() != null && (ev.entityPlayer.getHeldItem().getItem() instanceof ItemMinecart || ItemIdRange.contains(MyTown.instance.carts, ev.entityPlayer.getHeldItem()))) {
             int en = ev.entityPlayer.worldObj.getBlockId(x, y, z);
             if (Block.blocksList[en] instanceof BlockRail) {
-                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowCartInteraction
-                        || (targetBlock == null || targetBlock.town() == null)
-                        && MyTown.instance.getWorldWildSettings(ev.entityPlayer.dimension).allowCartInteraction) {
+                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowCartInteraction || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(ev.entityPlayer.dimension).allowCartInteraction) {
                     return;
                 }
             }
@@ -181,8 +171,7 @@ public class PlayerEvents implements IPlayerTracker {
                 World w = ev.entityPlayer.worldObj;
                 // Log.info("Block is %s:%s", w.getBlockId(x, y, z),
                 // w.getBlockMetadata(x, y, z));
-                if (ItemIdRange.contains(MyTown.instance.leftClickAccessBlocks, w.getBlockId(x, y, z),
-                        w.getBlockMetadata(x, y, z))) {
+                if (ItemIdRange.contains(MyTown.instance.leftClickAccessBlocks, w.getBlockId(x, y, z), w.getBlockMetadata(x, y, z))) {
                     perm = Permissions.Access;
                     if (r.canInteract(targetBlock, perm)) {
                         return;
@@ -241,8 +230,7 @@ public class PlayerEvents implements IPlayerTracker {
         if (ev.entityLiving instanceof EntityPlayer) {
             Resident t = source().getOrMakeResident((EntityPlayer) ev.entityLiving);
 
-            if (ev.source.getEntity() != null && !t.canBeAttackedBy(ev.source.getEntity())
-                    || ev.source.getSourceOfDamage() != null && !t.canBeAttackedBy(ev.source.getSourceOfDamage())) {
+            if (ev.source.getEntity() != null && !t.canBeAttackedBy(ev.source.getEntity()) || ev.source.getSourceOfDamage() != null && !t.canBeAttackedBy(ev.source.getSourceOfDamage())) {
                 ev.setCanceled(true);
                 // spamming
                 /*
@@ -322,8 +310,7 @@ public class PlayerEvents implements IPlayerTracker {
         Resident r = source().getOrMakeResident(player);
 
         if (!WorldBorder.instance.isWithinArea(player)) {
-            Log.warning(String.format("Player %s logged in over the world edge %s (%s, %s, %s). Sending to spawn.",
-                    r.name(), player.dimension, player.posX, player.posY, player.posZ));
+            Log.warning(String.format("Player %s logged in over the world edge %s (%s, %s, %s). Sending to spawn.", r.name(), player.dimension, player.posX, player.posY, player.posZ));
             r.respawnPlayer();
         }
 
@@ -333,9 +320,7 @@ public class PlayerEvents implements IPlayerTracker {
         r.location2 = t != null && t.town() != null ? t.owner() : null;
 
         if (!r.canInteract(t, (int) player.posY, Permissions.Enter)) {
-            Log.warning(String.format(
-                    "Player %s logged in at a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.",
-                    r.name(), r.location.name(), player.dimension, player.posX, player.posY, player.posZ));
+            Log.warning(String.format("Player %s logged in at a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.", r.name(), r.location.name(), player.dimension, player.posX, player.posY, player.posZ));
             r.respawnPlayer();
         }
 
@@ -358,12 +343,10 @@ public class PlayerEvents implements IPlayerTracker {
     }
 
     @Override
-    public void onPlayerChangedDimension(EntityPlayer player) {
-    }
+    public void onPlayerChangedDimension(EntityPlayer player) {}
 
     @Override
-    public void onPlayerRespawn(EntityPlayer player) {
-    }
+    public void onPlayerRespawn(EntityPlayer player) {}
 
     @ForgeSubscribe
     public void serverChat(ServerChatEvent ev) {

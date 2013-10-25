@@ -29,8 +29,7 @@ public class MyTownNonResident {
             return list;
         }
 
-        Resident res = MyTownDatasource.instance
-                .getOrMakeResident((EntityPlayer) cs);
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) cs);
         if (res.town() != null) {
             return list;
         }
@@ -44,14 +43,12 @@ public class MyTownNonResident {
         return list;
     }
 
-    public static boolean handleCommand(ICommandSender cs, String[] args)
-            throws Exception {
+    public static boolean handleCommand(ICommandSender cs, String[] args) throws Exception {
         if (!(cs instanceof EntityPlayer)) {
             return false;
         }
 
-        Resident res = MyTownDatasource.instance
-                .getOrMakeResident((EntityPlayer) cs);
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) cs);
         if (res.town() != null) {
             return false;
         }
@@ -68,12 +65,9 @@ public class MyTownNonResident {
             handled = true;
 
             if (args.length < 2 || args.length > 2) {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew .toString(), Term.TownCmdNewArgs.toString(), Term.TownCmdNewDesc.toString(), color));
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew.toString(), Term.TownCmdNewArgs.toString(), Term.TownCmdNewDesc.toString(), color));
             } else {
-                TownBlock home = MyTownDatasource.instance.getOrMakeBlock(
-                        res.onlinePlayer.dimension,
-                        res.onlinePlayer.chunkCoordX,
-                        res.onlinePlayer.chunkCoordZ);
+                TownBlock home = MyTownDatasource.instance.getOrMakeBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
                 try {
                     Town.assertNewTownParams(args[1], res, home);
                 } catch (Exception e) {
@@ -84,66 +78,55 @@ public class MyTownNonResident {
                     throw e;
                 }
 
-                res.pay.requestPayment("townnew", Cost.TownNew.item,
-                        new PayHandler.IDone() {
-                            @Override
-                            public void run(Resident res, Object[] ar2) {
-                                String[] args = (String[]) ar2[0];
+                res.pay.requestPayment("townnew", Cost.TownNew.item, new PayHandler.IDone() {
+                    @Override
+                    public void run(Resident res, Object[] ar2) {
+                        String[] args = (String[]) ar2[0];
 
-                                Town t = null;
-                                try { // should never crash because we're doing
-                                      // the same checks before
-                                    t = new Town(args[1], res,
-                                            (TownBlock) ar2[1]);
-                                } catch (CommandException e) {
-                                    Log.severe(
-                                            "Town creating failed after taking payment",
-                                            e);
-                                }
+                        Town t = null;
+                        try { // should never crash because we're doing
+                              // the same checks before
+                            t = new Town(args[1], res, (TownBlock) ar2[1]);
+                        } catch (CommandException e) {
+                            Log.severe("Town creating failed after taking payment", e);
+                        }
 
-                                // emulate that the player just entered it
-                                res.checkLocation();
+                        // emulate that the player just entered it
+                        res.checkLocation();
 
-                                String msg = Term.TownBroadcastCreated
-                                        .toString(res.name(), t.name());
-                                for (Object obj : MinecraftServer.getServer()
-                                        .getConfigurationManager().playerEntityList) {
-                                    ((EntityPlayer) obj).sendChatToPlayer(msg);
-                                }
+                        String msg = Term.TownBroadcastCreated.toString(res.name(), t.name());
+                        for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
+                            ((EntityPlayer) obj).sendChatToPlayer(msg);
+                        }
 
-                                t.sendTownInfo(res.onlinePlayer, res
-                                        .shouldShowTownBlocks());
-                            }
-                        }, args, home);
+                        t.sendTownInfo(res.onlinePlayer, res.shouldShowTownBlocks());
+                    }
+                }, args, home);
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdAccept.toString())) {
             Assert.Perm(cs, "mytown.cmd.accept");
             handled = true;
 
             if (res.inviteActiveFrom == null) {
-                throw new CommandException(
-                        Term.TownErrYouDontHavePendingInvitations);
+                throw new CommandException(Term.TownErrYouDontHavePendingInvitations);
             }
 
             res.setRank(Rank.Resident);
             res.inviteActiveFrom.addResident(res);
 
-            res.inviteActiveFrom.sendNotification(Level.INFO,
-                    Term.TownPlayerJoinedTown.toString(res.name()));
+            res.inviteActiveFrom.sendNotification(Level.INFO, Term.TownPlayerJoinedTown.toString(res.name()));
             res.inviteActiveFrom = null;
         } else if (args[0].equalsIgnoreCase(Term.TownCmdDeny.toString())) {
             Assert.Perm(cs, "mytown.cmd.deny");
             handled = true;
 
             if (res.inviteActiveFrom == null) {
-                throw new CommandException(
-                        Term.TownErrYouDontHavePendingInvitations);
+                throw new CommandException(Term.TownErrYouDontHavePendingInvitations);
             }
 
             res.inviteActiveFrom = null;
 
-            res.onlinePlayer.sendChatToPlayer(Term.TownPlayerDeniedInvitation
-                    .toString());
+            res.onlinePlayer.sendChatToPlayer(Term.TownPlayerDeniedInvitation.toString());
         }
 
         return handled;

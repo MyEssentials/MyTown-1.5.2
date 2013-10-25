@@ -201,33 +201,28 @@ public class Town {
             return 1;
         }
 
-        if (ForgePerms.getPermissionsHandler().canAccess(mayor.name(),
-                DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
-                // mayor.onlinePlayer.worldObj.provider.getDimensionName(),
+        if (ForgePerms.getPermissionManager().canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
+        // mayor.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.mayor.blocks.32")) {
             return 32;
         }
-        if (ForgePerms.getPermissionsHandler().canAccess(mayor.name(),
-                DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
-                // mayor.onlinePlayer.worldObj.provider.getDimensionName(),
+        if (ForgePerms.getPermissionManager().canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
+        // mayor.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.mayor.blocks.16")) {
             return 16;
         }
-        if (ForgePerms.getPermissionsHandler().canAccess(mayor.name(),
-                DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
-                // mayor.onlinePlayer.worldObj.provider.getDimensionName(),
+        if (ForgePerms.getPermissionManager().canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
+        // mayor.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.mayor.blocks.8")) {
             return 8;
         }
-        if (ForgePerms.getPermissionsHandler().canAccess(mayor.name(),
-                DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
-                // mayor.onlinePlayer.worldObj.provider.getDimensionName(),
+        if (ForgePerms.getPermissionManager().canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
+        // mayor.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.mayor.blocks.4")) {
             return 4;
         }
-        if (ForgePerms.getPermissionsHandler().canAccess(mayor.name(),
-                DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
-                // mayor.onlinePlayer.worldObj.provider.getDimensionName(),
+        if (ForgePerms.getPermissionManager().canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
+        // mayor.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.mayor.blocks.2")) {
             return 2;
         }
@@ -240,22 +235,22 @@ public class Town {
             return 1;
         }
 
-        if (ForgePerms.getPermissionsHandler().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(),
+        if (ForgePerms.getPermissionManager().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(),
         // res.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.resident.blocksmulti.10")) {
             return 10;
         }
-        if (ForgePerms.getPermissionsHandler().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(),
+        if (ForgePerms.getPermissionManager().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(),
         // res.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.resident.blocksmulti.8")) {
             return 8;
         }
-        if (ForgePerms.getPermissionsHandler().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(),
+        if (ForgePerms.getPermissionManager().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(),
         // res.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.resident.blocksmulti.4")) {
             return 4;
         }
-        if (ForgePerms.getPermissionsHandler().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(),
+        if (ForgePerms.getPermissionManager().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(),
         // res.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.resident.blocksmulti.2")) {
             return 2;
@@ -312,9 +307,7 @@ public class Town {
 
         int sqr = minDistanceFromOtherTown * minDistanceFromOtherTown;
         for (TownBlock b : MyTownDatasource.instance.blocks.values()) {
-            if (b != block && b.town() != null && b.town() != self && b.worldDimension() == block.worldDimension()
-                    && (b.town().nation() == null || self != null && b.town().nation() != self.nation())
-                    && block.squaredDistanceTo(b) <= sqr && !b.settings.allowClaimingNextTo) {
+            if (b != block && b.town() != null && b.town() != self && b.worldDimension() == block.worldDimension() && (b.town().nation() == null || self != null && b.town().nation() != self.nation()) && block.squaredDistanceTo(b) <= sqr && !b.settings.allowClaimingNextTo) {
                 throw new CommandException(Term.TownErrBlockTooCloseToAnotherTown);
             }
         }
@@ -324,38 +317,46 @@ public class Town {
         }
     }
 
-    public static boolean isBlockAdjacentToTown(TownBlock block, Town town)  {
-        
+    public static boolean isBlockAdjacentToTown(TownBlock block, Town town) {
+
         TownBlock adjacent;
-        
-        adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x()-1, block.z());
-        if (adjacent != null && adjacent.town() == town) return true;
-        adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x()+1, block.z());
-        if (adjacent != null && adjacent.town() == town) return true;
-        adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x(), block.z()-1);
-        if (adjacent != null && adjacent.town() == town) return true;
-        adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x(), block.z()+1);
-        if (adjacent != null && adjacent.town() == town) return true;
-        
+
+        adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x() - 1, block.z());
+        if (adjacent != null && adjacent.town() == town)
+            return true;
+        adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x() + 1, block.z());
+        if (adjacent != null && adjacent.town() == town)
+            return true;
+        adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x(), block.z() - 1);
+        if (adjacent != null && adjacent.town() == town)
+            return true;
+        adjacent = MyTownDatasource.instance.getBlock(block.worldDimension(), block.x(), block.z() + 1);
+        if (adjacent != null && adjacent.town() == town)
+            return true;
+
         return false;
-       
+
     }
-    
-    public static boolean isBlockAdjacentToBlocks(TownBlock block, Map<String, TownBlock> blocks)  {
-        
+
+    public static boolean isBlockAdjacentToBlocks(TownBlock block, Map<String, TownBlock> blocks) {
+
         TownBlock adjacent;
-        
-        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x()-1, block.z()));
-        if (adjacent != null) return true;
-        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x()+1, block.z()));
-        if (adjacent != null) return true;
-        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x(), block.z()-1));
-        if (adjacent != null) return true;
-        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x(), block.z()+1));
-        if (adjacent != null) return true;
-        
+
+        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x() - 1, block.z()));
+        if (adjacent != null)
+            return true;
+        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x() + 1, block.z()));
+        if (adjacent != null)
+            return true;
+        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x(), block.z() - 1));
+        if (adjacent != null)
+            return true;
+        adjacent = blocks.get(MyTownDatasource.getTownBlockKey(block.worldDimension(), block.x(), block.z() + 1));
+        if (adjacent != null)
+            return true;
+
         return false;
-       
+
     }
 
     public void addBlock(TownBlock block) throws CommandException {
@@ -477,10 +478,7 @@ public class Town {
     }
 
     public String serializeExtra() {
-        return settings.serialize()
-                + ";"
-                + (spawnLocation == null ? "" : spawnDimension + "/" + spawnLocation.xCoord + "/" + spawnLocation.yCoord + "/"
-                        + spawnLocation.zCoord + "/" + spawnEye1 + "/" + spawnEye2);
+        return settings.serialize() + ";" + (spawnLocation == null ? "" : spawnDimension + "/" + spawnLocation.xCoord + "/" + spawnLocation.yCoord + "/" + spawnLocation.zCoord + "/" + spawnEye1 + "/" + spawnEye2);
     }
 
     public void deserializeExtra(String val) {
@@ -581,8 +579,7 @@ public class Town {
 
         pl.sendChatToPlayer(Term.TownStatusName.toString(townColor, t.name()));
 
-        pl.sendChatToPlayer(Term.TownStatusGeneral.toString(t.blocks().size(), String.valueOf(t.totalBlocks()), t.nation() == null ? "none"
-                : t.nation().name()));
+        pl.sendChatToPlayer(Term.TownStatusGeneral.toString(t.blocks().size(), String.valueOf(t.totalBlocks()), t.nation() == null ? "none" : t.nation().name()));
         if (blocks_list.length() > 0) {
             pl.sendChatToPlayer(blocks_list.toString());
         }

@@ -32,12 +32,9 @@ public class CmdSetHome extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.ecmd.sethome");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.sethome");
         }
         return false;
-        // return cs instanceof EntityPlayerMP &&
-        // MyTown.instance.perms.canAccess(cs, "mytown.ecmd.sethome");
     }
 
     @Override
@@ -51,8 +48,7 @@ public class CmdSetHome extends CommandBase {
         Resident res = MyTownDatasource.instance.getOrMakeResident(pl);
 
         try {
-            if (!res.canInteract(pl.dimension, (int) pl.posX, (int) pl.posY,
-                    (int) pl.posZ, TownSettingCollection.Permissions.Build)) {
+            if (!res.canInteract(pl.dimension, (int) pl.posX, (int) pl.posY, (int) pl.posZ, TownSettingCollection.Permissions.Build)) {
                 throw new CommandException(Term.HomeCmdCannotSetHere);
             }
 
@@ -63,8 +59,7 @@ public class CmdSetHome extends CommandBase {
             if (h == null) {
                 if (Cost.HomeSetNew.item != null) {
                     request = Cost.HomeSetNew.item.copy();
-                    request.stackSize += Cost.homeSetNewAdditional
-                            * res.home.size();
+                    request.stackSize += Cost.homeSetNewAdditional * res.home.size();
                 }
             } else {
                 if (Cost.HomeReplace.item != null) {
@@ -72,30 +67,24 @@ public class CmdSetHome extends CommandBase {
                 }
             }
 
-            res.pay.requestPayment(h == null ? "homenew" : "homereplace",
-                    request, new PayHandler.IDone() {
-                        @Override
-                        public void run(Resident res, Object[] args) {
-                            setHome(res, (EntityPlayerMP) res.onlinePlayer,
-                                    (String[]) args[0]);
-                        }
-                    }, (Object) args);
+            res.pay.requestPayment(h == null ? "homenew" : "homereplace", request, new PayHandler.IDone() {
+                @Override
+                public void run(Resident res, Object[] args) {
+                    setHome(res, (EntityPlayerMP) res.onlinePlayer, (String[]) args[0]);
+                }
+            }, (Object) args);
         } catch (NoAccessException ex) {
             cs.sendChatToPlayer(ex.toString());
         } catch (CommandException ex) {
-            cs.sendChatToPlayer(Formatter.commandError(Level.WARNING,
-                    ex.errorCode.toString(ex.args)));
+            cs.sendChatToPlayer(Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
         } catch (Throwable ex) {
-            Log.log(Level.WARNING, String.format(
-                    "Command execution error by %s", cs), ex);
-            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex
-                    .toString()));
+            Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
+            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex.toString()));
         }
     }
 
     public static void setHome(Resident res, EntityPlayerMP pl, String[] args) {
         res.home.set(args.length == 0 ? null : args[0], pl);
-        pl.sendChatToPlayer(args.length == 0 ? Term.HomeCmdHomeSet.toString()
-                : Term.HomeCmdHome2Set.toString(args[0]));
+        pl.sendChatToPlayer(args.length == 0 ? Term.HomeCmdHomeSet.toString() : Term.HomeCmdHome2Set.toString(args[0]));
     }
 }

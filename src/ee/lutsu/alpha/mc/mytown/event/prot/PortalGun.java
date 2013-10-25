@@ -23,8 +23,7 @@ public class PortalGun extends ProtBase {
 
     @SuppressWarnings("rawtypes")
     Class clPortalBall = null;
-    List<String> systemOwnerNames = Lists.newArrayList("", "def", "coopA",
-            "coopB");
+    List<String> systemOwnerNames = Lists.newArrayList("", "def", "coopA", "coopB");
 
     // Used to iterate over a central position and the 6 blocks surrounding it
     private final static int[] xPos = { 0, 1, -1, 0, 0, 0, 0 };

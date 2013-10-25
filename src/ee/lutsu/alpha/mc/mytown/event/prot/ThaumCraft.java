@@ -28,9 +28,7 @@ public class ThaumCraft extends ProtBase {
     public static ThaumCraft instance = new ThaumCraft();
     public int explosionRadius = 6;
 
-    private Class<?> clAlumentum = null, clTileArcaneBore, clEntityFrostShard,
-            clItemWandFire, clItemWandExcavation, clItemWandLightning,
-            clItemWandTrade;
+    private Class<?> clAlumentum = null, clTileArcaneBore, clEntityFrostShard, clItemWandFire, clItemWandExcavation, clItemWandLightning, clItemWandTrade;
     Field fBore_toDig, fBore_digX, fBore_digZ, fBore_digY;
     Field fFrostShard_shootingEntity;
 
@@ -72,10 +70,7 @@ public class ThaumCraft extends ProtBase {
 
     @Override
     public boolean isEntityInstance(Item e) {
-        return clItemWandExcavation.isInstance(e)
-                || clItemWandFire.isInstance(e)
-                || clItemWandLightning.isInstance(e)
-                || clItemWandTrade.isInstance(e);
+        return clItemWandExcavation.isInstance(e) || clItemWandFire.isInstance(e) || clItemWandLightning.isInstance(e) || clItemWandTrade.isInstance(e);
     }
 
     @Override
@@ -95,7 +90,8 @@ public class ThaumCraft extends ProtBase {
             int z = (int) (t.posZ + t.motionZ);
             int dim = thrower.onlinePlayer.dimension;
 
-            if (!thrower.canInteract(dim, x - explosionRadius, y, z - explosionRadius, Permissions.Build) || !thrower.canInteract(dim, x - explosionRadius, y, z + explosionRadius, Permissions.Build) || !thrower.canInteract(dim, x + explosionRadius, y, z - explosionRadius, Permissions.Build) || !thrower.canInteract(dim, x + explosionRadius, y, z + explosionRadius, Permissions.Build)) {
+            if (!thrower.canInteract(dim, x - explosionRadius, y, z - explosionRadius, Permissions.Build) || !thrower.canInteract(dim, x - explosionRadius, y, z + explosionRadius, Permissions.Build) || !thrower.canInteract(dim, x + explosionRadius, y, z - explosionRadius, Permissions.Build)
+                    || !thrower.canInteract(dim, x + explosionRadius, y, z + explosionRadius, Permissions.Build)) {
                 return "Explosion would hit a protected town";
             }
         } else if (clEntityFrostShard.isInstance(e)) {
@@ -113,14 +109,8 @@ public class ThaumCraft extends ProtBase {
             int radius = 1;
             int dim = thrower.onlinePlayer.dimension;
 
-            if (!thrower.canInteract(dim, x - radius, y - radius, y + radius, z
-                    - radius, Permissions.Build)
-                    || !thrower.canInteract(dim, x - radius, y - radius, y
-                            + radius, z + radius, Permissions.Build)
-                    || !thrower.canInteract(dim, x + radius, y - radius, y
-                            + radius, z - radius, Permissions.Build)
-                    || !thrower.canInteract(dim, x + radius, y - radius, y
-                            + radius, z + radius, Permissions.Build)) {
+            if (!thrower.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build)
+                    || !thrower.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
                 return "Cannot build here";
             }
         }
@@ -131,37 +121,30 @@ public class ThaumCraft extends ProtBase {
     @Override
     public String update(Resident res, Item tool, ItemStack item) throws Exception {
         if (clItemWandFire.isInstance(tool)) {
-            List<Entity> list = getTargets(res.onlinePlayer.worldObj,
-                    res.onlinePlayer.getLook(17), res.onlinePlayer, 17);
+            List<Entity> list = getTargets(res.onlinePlayer.worldObj, res.onlinePlayer.getLook(17), res.onlinePlayer, 17);
             for (Entity e : list) {
                 if (!res.canAttack(e)) {
                     return "Cannot attack here";
                 }
             }
         } else if (clItemWandLightning.isInstance(tool)) {
-            List<Entity> list = getTargets(res.onlinePlayer.worldObj,
-                    res.onlinePlayer.getLook(20), res.onlinePlayer, 20);
+            List<Entity> list = getTargets(res.onlinePlayer.worldObj, res.onlinePlayer.getLook(20), res.onlinePlayer, 20);
             for (Entity e : list) {
                 if (!res.canAttack(e)) {
                     return "Cannot attack here";
                 }
             }
         } else if (clItemWandExcavation.isInstance(tool)) {
-            MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(
-                    res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
+            MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
 
             if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
-                if (!res.canInteract(res.onlinePlayer.dimension, pos.blockX,
-                        pos.blockY, pos.blockZ, Permissions.Build)) {
+                if (!res.canInteract(res.onlinePlayer.dimension, pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
                     return "Cannot build here";
                 }
             }
         } else if (clItemWandTrade.isInstance(tool)) {
             if (!res.onlinePlayer.isSneaking()) {
-                MovingObjectPosition pos = Utils
-                        .getMovingObjectPositionFromPlayer(
-                                res.onlinePlayer.worldObj, res.onlinePlayer,
-                                false, 10.0D);
+                MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
 
                 if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
                     int x = pos.blockX;
@@ -170,14 +153,8 @@ public class ThaumCraft extends ProtBase {
                     int radius = 3;
                     int dim = res.onlinePlayer.dimension;
 
-                    if (!res.canInteract(dim, x - radius, y - radius, y
-                            + radius, z - radius, Permissions.Build)
-                            || !res.canInteract(dim, x - radius, y - radius, y
-                                    + radius, z + radius, Permissions.Build)
-                            || !res.canInteract(dim, x + radius, y - radius, y
-                                    + radius, z - radius, Permissions.Build)
-                            || !res.canInteract(dim, x + radius, y - radius, y
-                                    + radius, z + radius, Permissions.Build)) {
+                    if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build)
+                            || !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
                         return "Cannot build here";
                     }
                 }
@@ -187,33 +164,25 @@ public class ThaumCraft extends ProtBase {
         return null;
     }
 
-    private List<Entity> getTargets(World world, Vec3 tvec, EntityPlayer p,
-            double range) {
+    private List<Entity> getTargets(World world, Vec3 tvec, EntityPlayer p, double range) {
         Entity pointedEntity = null;
-        Vec3 vec3d = world.getWorldVec3Pool().getVecFromPool(p.posX, p.posY,
-                p.posZ);
-        Vec3 vec3d2 = vec3d.addVector(tvec.xCoord * range, tvec.yCoord * range,
-                tvec.zCoord * range);
+        Vec3 vec3d = world.getWorldVec3Pool().getVecFromPool(p.posX, p.posY, p.posZ);
+        Vec3 vec3d2 = vec3d.addVector(tvec.xCoord * range, tvec.yCoord * range, tvec.zCoord * range);
         float f1 = 1.0F;
-        List<?> list = world.getEntitiesWithinAABBExcludingEntity(p, p.boundingBox
-                .addCoord(tvec.xCoord * range, tvec.yCoord * range,
-                        tvec.zCoord * range).expand(f1, f1, f1));
+        List<?> list = world.getEntitiesWithinAABBExcludingEntity(p, p.boundingBox.addCoord(tvec.xCoord * range, tvec.yCoord * range, tvec.zCoord * range).expand(f1, f1, f1));
 
         ArrayList<Entity> l = new ArrayList<Entity>();
         for (int i = 0; i < list.size(); i++) {
             Entity entity = (Entity) list.get(i);
             if (entity.canBeCollidedWith()) {
                 float f2 = Math.max(1.0F, entity.getCollisionBorderSize());
-                AxisAlignedBB axisalignedbb = entity.boundingBox.expand(f2,
-                        f2 * 1.25F, f2);
-                MovingObjectPosition movingobjectposition = axisalignedbb
-                        .calculateIntercept(vec3d, vec3d2);
+                AxisAlignedBB axisalignedbb = entity.boundingBox.expand(f2, f2 * 1.25F, f2);
+                MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3d, vec3d2);
 
                 if (movingobjectposition != null) {
                     pointedEntity = entity;
 
-                    if (pointedEntity != null
-                            && p.canEntityBeSeen(pointedEntity)) {
+                    if (pointedEntity != null && p.canEntityBeSeen(pointedEntity)) {
                         l.add(pointedEntity);
                     }
                 }
@@ -232,21 +201,14 @@ public class ThaumCraft extends ProtBase {
             fBore_digZ.setAccessible(true);
 
             if (fBore_toDig.getBoolean(e)) {
-                Resident actor = getActorFromLocation(
-                        e.worldObj.provider.dimensionId, e.xCoord, e.yCoord,
-                        e.zCoord, "#thaumcraft-bore#");
-                
+                Resident actor = getActorFromLocation(e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, "#thaumcraft-bore#");
+
                 int blockX = fBore_digX.getInt(e);
                 int blockY = fBore_digY.getInt(e);
                 int blockZ = fBore_digZ.getInt(e);
-                
+
                 if (!actor.canInteract(e.worldObj.provider.dimensionId, blockX, blockY, blockZ, Permissions.Build)) {
-                    Log.warning(String
-                            .format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) which failed. Actor: %s",
-                                    e.worldObj.provider.dimensionId, e.xCoord,
-                                    e.yCoord, e.zCoord, fBore_digX.getInt(e),
-                                    fBore_digY.getInt(e), fBore_digZ.getInt(e),
-                                    actor.name()));
+                    Log.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) which failed. Actor: %s", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e), actor.name()));
 
                     fBore_toDig.set(e, false);
                 }
