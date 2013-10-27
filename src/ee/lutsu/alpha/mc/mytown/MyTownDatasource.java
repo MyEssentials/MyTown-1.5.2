@@ -173,8 +173,7 @@ public class MyTownDatasource extends MyTownDB {
     }
 
     public void unloadTown(Town t) {
-        Log.info("Unloading town (%s)", t.name());
-        towns.remove(t);
+        towns.remove(t.name().toLowerCase());
     }
 
     public void unloadNation(Nation n) {
