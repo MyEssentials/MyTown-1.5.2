@@ -1,8 +1,11 @@
 package ee.lutsu.alpha.mc.mytown.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
+
+import com.google.common.base.Joiner;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -64,7 +67,7 @@ public class MyTownNonResident {
             Assert.Perm(cs, "mytown.cmd.new.dim" + res.onlinePlayer.dimension);
             handled = true;
 
-            if (args.length < 2 || args.length > 2) {
+            if (args.length < 2) {
                 cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew.toString(), Term.TownCmdNewArgs.toString(), Term.TownCmdNewDesc.toString(), color));
             } else {
                 TownBlock home = MyTownDatasource.instance.getOrMakeBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
@@ -81,12 +84,10 @@ public class MyTownNonResident {
                 res.pay.requestPayment("townnew", Cost.TownNew.item, new PayHandler.IDone() {
                     @Override
                     public void run(Resident res, Object[] ar2) {
-                        String[] args = (String[]) ar2[0];
-
                         Town t = null;
                         try { // should never crash because we're doing
                               // the same checks before
-                            t = new Town(args[1], res, (TownBlock) ar2[1]);
+                            t = new Town((String)ar2[0], res, (TownBlock) ar2[1]);
                         } catch (CommandException e) {
                             Log.severe("Town creating failed after taking payment", e);
                         }
@@ -101,7 +102,7 @@ public class MyTownNonResident {
 
                         t.sendTownInfo(res.onlinePlayer, res.shouldShowTownBlocks());
                     }
-                }, args, home);
+                }, Joiner.on("_").join(Arrays.copyOfRange(args, 1, args.length)), home);
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdAccept.toString())) {
             Assert.Perm(cs, "mytown.cmd.accept");

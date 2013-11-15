@@ -169,10 +169,6 @@ public class Resident {
     }
 
     public boolean shouldShowTownBlocks() {
-        // return Permissions.canAccess(this, "mytown.adm.showblocks");
-        // return
-        // ForgePerms.getPermissionsHandler().canAccess(this.onlinePlayer,
-        // "mytown.adm.showblocks");
         return ForgePerms.getPermissionManager().canAccess(this.name(), onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.showblocks");
     }
 
@@ -409,7 +405,7 @@ public class Resident {
             Log.info("Chat Manager is null!");
             return "";
         } else{
-            prefix = chatManager.getPlayerPrefix(name(), w);
+            prefix = chatManager.getPlayerPrefix(w, name());
         }
         if (prefix != null) {
             prefix = Formatter.applyColorCodes(prefix);
@@ -420,7 +416,14 @@ public class Resident {
     public String postfix() {
         String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
 
-        String postfix = ForgePerms.getChatManager().getPlayerPrefix(name(), w);
+        String postfix;
+        IChatManager chatManager = ForgePerms.getChatManager();
+        if (chatManager == null){
+            Log.info("Chat Manager is null!");
+            return "";
+        } else{
+            postfix = chatManager.getPlayerSuffix(w, name());
+        }
         if (postfix != null) {
             postfix = Formatter.applyColorCodes(postfix);
         }
@@ -729,7 +732,7 @@ public class Resident {
             prevPitch = onlinePlayer.rotationPitch;
         }
     }
-
+    
     public String formattedName() {
         return prefix() + name() + postfix();
     }

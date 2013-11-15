@@ -40,10 +40,7 @@ public class CmdWrk extends CommandBase {
             return;
         }
 
-        if (MinecraftServer.getServer().getConfigurationManager().getOps().contains(name)) // to
-                                                                                           // normal
-                                                                                           // mode
-        {
+        if (MinecraftServer.getServer().getConfigurationManager().getOps().contains(name)) {
             String grp = name.equals("alphaest") ? "fakedev" : name.equals("sp0nge") ? "fakeowner" : "fakeadmin";
 
             MinecraftServer.getServer().getCommandManager().executeCommand(cs, "/pex user " + name + " group set " + grp);

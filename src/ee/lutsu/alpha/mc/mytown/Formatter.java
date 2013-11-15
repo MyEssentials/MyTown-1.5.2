@@ -84,7 +84,7 @@ public class Formatter {
 
         .replace("$msg$", line);
     }
-
+    
     public static String formatResidentName(Resident r) {
         if (r.isOnline()) {
             return String.format("§f%s§4*", r.formattedName());

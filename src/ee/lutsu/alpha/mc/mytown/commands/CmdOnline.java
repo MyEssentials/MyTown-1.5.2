@@ -38,8 +38,6 @@ public class CmdOnline extends CommandBase {
         }
         Log.log(Level.INFO, "%s failed to use node %s", sender.getCommandSenderName(), "mytown.ecmd.online");
         return false;
-        // return MyTown.instance.perms.canAccess(par1ICommandSender,
-        // "mytown.ecmd.online");
     }
 
     @Override
