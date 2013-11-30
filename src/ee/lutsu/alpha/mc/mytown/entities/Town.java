@@ -264,6 +264,9 @@ public class Town {
         int perRes = blocksPerResident();
         for (Resident r : residents) {
             b += perRes * residentBlockMultiplier(r) + r.extraBlocks;
+            b += ForgePerms.getChatManager().getPlayerInfoInteger(String.valueOf(r.prevDimension), r.name(), "mytown.res.blocks", 0);
+            String playerGroup = ForgePerms.getPermissionManager().getPrimaryGroup(String.valueOf(r.prevDimension), r.name());
+            b +=  ForgePerms.getChatManager().getGroupInfoInteger(String.valueOf(r.prevDimension), playerGroup, "mytown.res.blocks", 0);
         }
 
         return b;
@@ -522,7 +525,7 @@ public class Town {
         }
     }
 
-    public void sendTownInfo(ICommandSender pl, boolean adminInfo) {
+    public void sendTownInfo(ICommandSender pl) {
         Town t = this;
 
         StringBuilder mayors = new StringBuilder();
@@ -560,6 +563,7 @@ public class Town {
 
         StringBuilder blocks_list = new StringBuilder();
 
+        /* Spams chat too much. Maybe put it in a different command at some point
         if (adminInfo) {
             for (TownBlock block : blocks) {
                 if (blocks_list.length() > 0) {
@@ -568,6 +572,7 @@ public class Town {
                 blocks_list.append(String.format("(%s,%s)", block.x(), block.z()));
             }
         }
+        */
 
         String townColor = "§2";
         if (pl instanceof EntityPlayer) {

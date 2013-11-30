@@ -81,6 +81,13 @@ public class CmdMyTownAdmin extends CommandBase {
                 cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdWipeDim.toString(), Term.TownadmCmdWipeDimArgs.toString(), Term.TownadmCmdWipeDimDesc.toString(), color));
                 cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdResetFocusedChannels.toString(), "", Term.TownadmCmdResetFocusedChannelsDesc.toString(), color));
                 cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdSnoopPrivateChat.toString(), "", Term.TownadmCmdSnoopPrivateChatDesc.toString(), color));
+                cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdVersion.toString(), "", Term.TownadmCmdVersion.toString(), color));
+            }  else if (var2[0].equalsIgnoreCase(Term.TownadmCmdVersion.toString())){
+                if (cs instanceof EntityPlayerMP && !ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.version")) {
+                    cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString());
+                    return;
+                }
+                cs.sendChatToPlayer(String.format(Term.TownadmCmdVersionFormat.toString(), MyTown.VERSION));
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdReload.toString())) {
                 if (cs instanceof EntityPlayerMP && !ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.reload")) {
                     cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString());

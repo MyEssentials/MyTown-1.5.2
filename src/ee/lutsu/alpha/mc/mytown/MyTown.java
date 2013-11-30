@@ -61,13 +61,14 @@ import ee.lutsu.alpha.mc.mytown.event.WorldEvents;
 import ee.lutsu.alpha.mc.mytown.event.tick.WorldBorder;
 import ee.lutsu.alpha.mc.mytown.sql.Database;
 
-@Mod(modid = "MyTown", name = "My Town", version = "1.5.1.10")
+@Mod(modid = "MyTown", name = "My Town", version = "@VERSION@.@BUILD_NUMBER@", dependencies = "required-after:Forge;required-after:ForgePerms")
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
 public class MyTown {
     public static String MOD_NAME = "MyTown";
     public static String CONFIG_FOLDER = "config/MyTown/";
     public static String LIB_FOLDER = CONFIG_FOLDER + "lib/";
     public static String CONFIG_FILE = CONFIG_FOLDER + "MyTown.cfg";
+    public static String VERSION = "@VERSION@.@BUILD_NUMBER@";
     public static API mytownAPI = new APIHandler();
 
     public TownSettingCollection serverWildSettings = new TownSettingCollection(true, true);

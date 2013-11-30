@@ -19,6 +19,7 @@ import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.PayHandler;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.Town;
+import ee.lutsu.alpha.mc.mytown.entities.TownBlock;
 
 public class MyTownEveryone {
     public static List<String> getAutoComplete(ICommandSender cs, String[] args) {
@@ -95,6 +96,21 @@ public class MyTownEveryone {
                 cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdRes.toString(), Term.TownCmdResArgs.toString(), Term.TownCmdResDesc.toString(), null));
                 cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdFriend.toString(), Term.TownCmdFriendArgs.toString(), Term.TownCmdFriendDesc.toString(), color));
                 cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdSpawn.toString(), Term.TownCmdSpawnArgs.toString(), Term.TownCmdSpawnDesc.toString(), color));
+            }  else if (args.length > 0 && args[0].equalsIgnoreCase(Term.TownCmdHere.toString())){
+                Assert.Perm(cs, "mytown.cmd.here");
+                TownBlock block = MyTownDatasource.instance.getPermBlockAtCoord(res.onlinePlayer.dimension, (int)res.onlinePlayer.posX, (int)res.onlinePlayer.posY, (int)res.onlinePlayer.posZ);
+                handled = true;
+                
+                if (block == null){
+                    return true;
+                }
+
+                Town t = block.town();
+                if (t == null) {
+                    throw new CommandException(Term.TownErrNotFound, args[1]);
+                }
+
+                t.sendTownInfo(cs);
             } else if (args.length > 0 && args[0].equalsIgnoreCase(Term.TownCmdMap.toString())) {
                 Assert.Perm(cs, "mytown.cmd.map");
                 handled = true;
@@ -125,7 +141,7 @@ public class MyTownEveryone {
                         throw new CommandException(Term.TownErrNotFound, args[1]);
                     }
 
-                    t.sendTownInfo(cs, res.shouldShowTownBlocks());
+                    t.sendTownInfo(cs);
                 } else {
                     cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdInfo.toString(), Term.TownCmdInfoArgs.toString(), Term.TownCmdInfoDesc.toString(), color));
                 }
@@ -206,7 +222,7 @@ public class MyTownEveryone {
                         throw new CommandException(Term.TownErrNotFound, args[1]);
                     }
 
-                    t.sendTownInfo(cs, true);
+                    t.sendTownInfo(cs);
                 } else {
                     cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdInfo.toString(), Term.TownCmdInfoArgs.toString(), Term.TownCmdInfoDesc.toString(), null));
                 }

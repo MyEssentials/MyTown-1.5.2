@@ -26,7 +26,7 @@ public class PayHandler {
 
         requestedItem = null;
     }
-    
+
     public boolean tryPayByHand() {
         if (requestedItem == null) {
             return false;
@@ -43,7 +43,7 @@ public class PayHandler {
         }
         return false;
     }
-    
+
     private void purchaseComplete() {
         requestedItem = null;
 
@@ -66,6 +66,8 @@ public class PayHandler {
                 if (ForgePerms.getEconomyManager().playerWithdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)){
                 	owner.onlinePlayer.sendChatToPlayer("Took " + ForgePerms.getEconomyManager().format(requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize));
                     purchaseComplete();
+                } else{
+                    owner.onlinePlayer.sendChatToPlayer("You don't have enough money! You need " + ForgePerms.getEconomyManager().format(requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize));
                 }
             }
         }

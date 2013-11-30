@@ -1,11 +1,11 @@
 package ee.lutsu.alpha.mc.mytown.event.prot;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
-import ee.lutsu.alpha.mc.mytown.Log;
+import net.minecraft.util.MovingObjectPosition;
+import ee.lutsu.alpha.mc.mytown.Utils;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
+import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.Permissions;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 
 public class TwilightForest extends ProtBase {
@@ -25,30 +25,21 @@ public class TwilightForest extends ProtBase {
     @Override
     public String update(Resident res, Item tool, ItemStack item) throws Exception {
         if (cTFCrumbleHorn.isInstance(tool)) {
-            // WIP... not actually used yet
-            EntityPlayer player = res.onlinePlayer;
-            //int direction = MathHelper.floor_double((double) ((player.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-            Vec3 pos = res.onlinePlayer.getLookVec();
-
-            Log.info("------------------------------");
-            Log.info("Checking (%s, %s, %s)", pos.xCoord, pos.yCoord, pos.zCoord);
-            Log.info("------------------------------");
+            MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
+            
+            if (!res.canInteract((int)pos.blockX, (int)pos.blockY, (int)pos.blockZ, Permissions.Build)){
+                return "cannot interact here";
+            }
 
             for (int z = 1; z <= 5; z++) {
                 for (int x = -2; x <= 2; x++) {
                     for (int y = -2; y <= 2; y++) {
-                        Log.info("Checking (%s, %s, %s)", player.posX + x, player.posY + y, player.posZ + z);
-                        /*
-                         * if (!res.canInteract((int)pos2.xCoord+x,
-                         * (int)pos2.yCoord, (int)pos2.zCoord+z,
-                         * Permissions.Build)){ Log.info("Hit something!");
-                         * return "Cannot attack here"; }
-                         */
+                        if (!res.canInteract((int)pos.blockX+x, (int)pos.blockY+y, (int)pos.blockZ+z, Permissions.Build)){
+                            return "Cannot interact here"; 
+                        }
                     }
                 }
             }
-
-            Log.info("------------------------------");
         }
         return null;
     }

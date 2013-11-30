@@ -228,7 +228,7 @@ public class MyTownNation {
                         ((EntityPlayer) obj).sendChatToPlayer(msg);
                     }
 
-                    town.sendTownInfo(cs, res.shouldShowTownBlocks());
+                    town.sendTownInfo(cs);
                 } else {
                     cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNation.toString() + " " + Term.TownCmdNationNew.toString(), Term.TownCmdNationNewArgs.toString(), Term.TownCmdNationNewDesc.toString(), color));
                 }
@@ -335,7 +335,7 @@ public class MyTownNation {
                         ((EntityPlayer) obj).sendChatToPlayer(msg);
                     }
 
-                    town.sendTownInfo(cs, res.shouldShowTownBlocks());
+                    town.sendTownInfo(cs);
                 } else {
                     cs.sendChatToPlayer(Term.NationDeleteConfirmation.toString());
                 }

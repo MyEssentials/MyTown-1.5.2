@@ -37,7 +37,6 @@ import ee.lutsu.alpha.mc.mytown.event.prot.Mobs;
 import ee.lutsu.alpha.mc.mytown.event.prot.ModularPowersuits;
 import ee.lutsu.alpha.mc.mytown.event.prot.PortalGun;
 import ee.lutsu.alpha.mc.mytown.event.prot.RailCraft;
-import ee.lutsu.alpha.mc.mytown.event.prot.RedPower;
 import ee.lutsu.alpha.mc.mytown.event.prot.SteveCarts;
 import ee.lutsu.alpha.mc.mytown.event.prot.TNT;
 import ee.lutsu.alpha.mc.mytown.event.prot.ThaumCraft;
@@ -63,8 +62,8 @@ public class ProtectionEvents implements ITickHandler {
     public ProtectionEvents() {
         ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, TNT.instance, ThaumCraft.instance, ArsMagica.instance, PortalGun.instance, IndustrialCraft.instance, SteveCarts.instance, RailCraft.instance, TrainCraft.instance, Mekanism.instance,
                 ModularPowersuits.instance, MFR.instance }));
-        ProtectionEvents.tileProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, RedPower.instance, ComputerCraft.instance, ThaumCraft.instance }));
-        ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, RedPower.instance, ComputerCraft.instance, ArsMagica.instance, ThaumCraft.instance, ModularPowersuits.instance, TinkersConstruct.instance }));
+        ProtectionEvents.tileProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance }));
+        ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ArsMagica.instance, ThaumCraft.instance, ModularPowersuits.instance, TinkersConstruct.instance }));
     }
 
     public static void addEntityProtection(ProtBase protection) {

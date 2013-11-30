@@ -220,7 +220,7 @@ public class ThaumCraft extends ProtBase {
 
     @Override
     public String getMod() {
-        return "ThaumCraft";
+        return "Thaumcraft4";
     }
 
     @Override
