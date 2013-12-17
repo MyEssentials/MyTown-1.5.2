@@ -185,6 +185,18 @@ public class MyTown {
 
     private void loadGeneralConfigs(Configuration config) throws IOException {
         Property prop;
+
+        prop = config.get("general", "showTownLoginMessage", true);
+        prop.comment = "Whether to show the login message to town members when another member logins in";
+        Town.showTownLoginMessage = prop.getBoolean(true);
+        
+        prop = config.get("general", "showTownLogoutMessage", true);
+        prop.comment = "Whether to show the logout message to town members when another member logins out";
+        Town.showTownLogoutMessage = prop.getBoolean(true);
+        
+        prop = config.get("general", "TermDumpFile", "");
+        prop.comment = "Filename to dump the terms to (useful for a starting translation file)";
+        Term.dumpLangFile(prop.getString());
         
         prop = config.get("general", "Translations", "");
         prop.comment = "Filename in config folder with the term translations";

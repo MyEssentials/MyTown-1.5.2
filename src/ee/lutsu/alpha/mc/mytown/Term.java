@@ -1,5 +1,7 @@
 package ee.lutsu.alpha.mc.mytown;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.HashMap;
 
 public enum Term {
@@ -147,7 +149,7 @@ public enum Term {
 
     TownErrCmdUnknownArgument("Unknown argument: §4%s"), TownErrCmdNumberFormatException("The input isn't numerical"),
 
-    TownErrInvitationSelf("The fuck are you doing? Invite OTHERS"), TownErrInvitationAlreadyInYourTown("Hes in your town moron"), TownErrInvitationActive("The player has a pending invitation already"), TownErrInvitationInTown("The player is already in a town"),
+    TownErrInvitationSelf("What are you doing? Invite OTHERS"), TownErrInvitationAlreadyInYourTown("Hes in your town moron"), TownErrInvitationActive("The player has a pending invitation already"), TownErrInvitationInTown("The player is already in a town"),
 
     TownErrPlayerNotInYourTown("The player is not in your town"), TownErrPlayerDoesntHaveAccessToTownManagement("The player can't access town management by perm nodes"), TownErrCannotDoWithYourself("You cannot do this with yourself"), TownErrPlayerIsAlreadyMayor("The player is already a mayor"), TownErrPlayerIsAlreadyAssistant(
             "The player is already an assistant"), TownErrPlayerIsNotAssistant("The player isn't an assistant"), TownErrCannotUseThisDemoteMayor("Cannot use this to demote a mayor"),
@@ -276,5 +278,24 @@ public enum Term {
         }
 
         terms.put(term, val);
+    }
+    
+    public static void dumpLangFile(String filename){
+    	BufferedWriter writer;
+    	if (filename.trim() == "" || filename.trim().isEmpty()) return;
+    	Log.info("Dumping terms to %s", filename);
+    	try {
+			FileWriter fw = new FileWriter(MyTown.CONFIG_FOLDER + filename);
+			writer = new BufferedWriter(fw);
+			writer.write("# Default terms used by MyTown");
+			writer.newLine();
+	    	for (Term t : Term.values()){
+	    		writer.append(t.fname() + "=" + t.defaultVal);
+	    		writer.newLine();
+	    	}
+	    	writer.close();
+		} catch (Exception e) {
+			Log.warning("Failed to dump the terms because %s", e.getMessage());
+		}
     }
 }

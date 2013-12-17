@@ -29,6 +29,8 @@ public class Town {
     public static boolean allowFullPvp = false;
     public static boolean allowMemberToForeignPvp = true;
     public static String[] pvpSafeTowns = new String[0];
+	public static boolean showTownLoginMessage = true;
+	public static boolean showTownLogoutMessage = true;
 
     private int id;
     private String name;
@@ -595,10 +597,12 @@ public class Town {
     }
 
     public void notifyPlayerLoggedOn(Resident r) {
+    	if (!showTownLoginMessage) return;
         sendNotification(Level.INFO, Term.TownBroadcastLoggedIn.toString(r.name()));
     }
 
     public void notifyPlayerLoggedOff(Resident r) {
+    	if (!showTownLogoutMessage) return;
         sendNotification(Level.INFO, Term.TownBroadcastLoggedOut.toString(r.name()));
     }
 }
